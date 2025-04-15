@@ -1,0 +1,42 @@
+-- Tabla de propiedades
+CREATE TABLE IF NOT EXISTS properties (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  price NUMERIC NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('venta', 'alquiler')),
+  location TEXT NOT NULL,
+  bedrooms INTEGER NOT NULL,
+  bathrooms INTEGER NOT NULL,
+  area NUMERIC NOT NULL,
+  features JSONB,
+  status TEXT NOT NULL DEFAULT 'activa' CHECK (status IN ('activa', 'vendida', 'alquilada')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de imágenes de propiedades
+CREATE TABLE IF NOT EXISTS property_images (
+  id SERIAL PRIMARY KEY,
+  property_id INTEGER REFERENCES properties(id) ON DELETE CASCADE,
+  storage_path TEXT NOT NULL,
+  main_image BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Políticas de seguridad (RLS)
+-- Permitir lectura pública de propiedades activas
+ALTER TABLE properties ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Propiedades visibles públicamente" ON properties
+  FOR SELECT USING (status = 'activa' OR auth.role() = 'authenticated');
+
+-- Permitir a usuarios autenticados crear, actualizar y eliminar propiedades
+CREATE POLICY "Los usuarios autenticados pueden gestionar propiedades" ON properties
+  FOR ALL USING (auth.role() = 'authenticated');
+
+-- Configurar imágenes
+ALTER TABLE property_images ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Imágenes visibles públicamente" ON property_images
+  FOR SELECT USING (true);
+CREATE POLICY "Los usuarios autenticados pueden gestionar imágenes" ON property_images
+  FOR ALL USING (auth.role() = 'authenticated');
