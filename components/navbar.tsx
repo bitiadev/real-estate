@@ -5,17 +5,18 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Building, Menu, X } from "lucide-react"
+import siteConfig from "@/config/siteConfig.json"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white flex justify-center">
-      <div className="container flex h-16 items-center justify-between">
+    <header className="px-4 md:px-8 sticky top-0 z-50 w-full border-b bg-azul flex justify-center text-naranja">
+      <div className="w-full flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
             <Building className="h-6 w-6" />
-            <span className="text-lg font-bold">Inmobiliaria</span>
+            <span className="text-lg font-bold">{siteConfig.empresa}</span>
           </Link>
         </div>
 
@@ -37,11 +38,11 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        <div className="hidden md:flex gap-4">
+     {/*    <div className="hidden md:flex gap-4">
           <Link href="/admin/login">
             <Button variant="outline">Acceso Admin</Button>
           </Link>
-        </div>
+        </div> */}
 
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <SheetTrigger asChild className="md:hidden">

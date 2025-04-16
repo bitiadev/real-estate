@@ -59,6 +59,9 @@ const SheetContent = React.forwardRef<
 >(({ side = "right", className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
+    <SheetPrimitive.DialogTitle className="text-lg font-semibold text-foreground">
+      "Inmobiliaria"
+    </SheetPrimitive.DialogTitle>
     <SheetPrimitive.Content
       ref={ref}
       className={cn(sheetVariants({ side }), className)}

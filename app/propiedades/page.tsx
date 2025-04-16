@@ -307,7 +307,7 @@ export default function PropertiesPage() {
   }
 
   return (
-    <div className="container px-4 py-8 md:px-6 md:py-12">
+    <div className="px-4 md:px-8 py-8 md:py-12">
       <h1 className="text-3xl font-bold mb-4">Buscar Propiedades</h1>
 
       {/* Barra de búsqueda y filtros móviles */}
@@ -666,7 +666,7 @@ export default function PropertiesPage() {
               <AccordionItem value="price" className="border-b">
                 <AccordionTrigger className="py-2 text-sm font-medium">Precio</AccordionTrigger>
                 <AccordionContent>
-                  <div className="px-2">
+                  <div className="px-2 py-2">
                     <Slider
                       value={[filters.minPrice, filters.maxPrice]}
                       max={filters.maxPrice}
