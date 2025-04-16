@@ -308,7 +308,7 @@ export default function PropertiesAdminPage() {
   }
 
   return (
-    <div className="container py-8">
+    <div className="px-4 md:px-8 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold mb-1">Gestión de Propiedades</h1>

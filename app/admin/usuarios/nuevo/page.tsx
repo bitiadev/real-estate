@@ -73,8 +73,8 @@ export default function NuevoUsuario() {
   }
 
   return (
-    <div className="container max-w-md py-8">
-      <Link href="/admin/usuarios" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+    <div className="m-auto max-w-md py-8">
+      <Link href="/admin/usuarios" className="px-4 w-full justify-end inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Volver a usuarios
       </Link>
