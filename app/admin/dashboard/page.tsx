@@ -257,7 +257,7 @@ export default function AdminDashboard() {
               <Building className="h-6 w-6 text-gray-700" />
               <span className="ml-2 font-semibold">Inmobiliaria Admin</span>
             </div>
-            <button onClick={() => setSidebarOpen(false)}>
+            <button onClick={() => setSidebarOpen(false)} title="Close sidebar">
               <X className="h-6 w-6 text-gray-500" />
             </button>
           </div>
@@ -349,7 +349,7 @@ export default function AdminDashboard() {
       <div className="lg:pl-64 flex flex-col flex-1">
         {/* Header */}
         <header className="sticky top-0 z-10 flex items-center h-16 bg-white border-b border-gray-200 px-4 sm:px-6">
-          <button type="button" className="lg:hidden mr-4 text-gray-500" onClick={() => setSidebarOpen(true)}>
+          <button type="button" className="lg:hidden mr-4 text-gray-500" onClick={() => setSidebarOpen(true)} title="Open sidebar">
             <Menu className="h-6 w-6" />
           </button>
           <div className="flex-1 flex justify-between">

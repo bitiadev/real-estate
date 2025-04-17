@@ -4,7 +4,7 @@ import siteConfig from "@/config/siteConfig.json"
 
 export default function Footer() {
   return (
-    <footer className="bg-azul text-gray-300">
+    <footer id="footer" className="bg-azul text-gray-300">
       <div className="container px-4 py-12 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>

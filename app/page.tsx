@@ -42,7 +42,16 @@ export default async function HomePage() {
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4 mt-8">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
-                  <Input placeholder="Ubicación" />
+                  <Select defaultValue="TresArroyos">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Ubicacion" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="TresArroyos">Tres Arroyos</SelectItem>
+                      <SelectItem value="Claromeco">Claromeco</SelectItem>
+                      <SelectItem value="Otras">Otras</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Select defaultValue="all">
@@ -121,7 +130,7 @@ export default async function HomePage() {
               <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
                 <Home className="h-12 w-12 text-gray-700" />
                 <h3 className="text-xl font-bold">Compra de Propiedades</h3>
-                <p className="text-gray-500">Te ayudamos a encontrar la propiedad perfecta para ti y tu familia</p>
+                <p className="text-gray-500">Te ayudamos a encontrar la propiedad perfecta para vos y tu familia</p>
               </CardContent>
             </Card>
 

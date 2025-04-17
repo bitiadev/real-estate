@@ -27,13 +27,13 @@ export default function Navbar() {
           <Link href="/propiedades" className="text-sm font-medium hover:underline">
             Propiedades
           </Link>
-          <Link href="#" className="text-sm font-medium hover:underline">
+          {/* <Link href="#" className="text-sm font-medium hover:underline">
             Servicios
           </Link>
           <Link href="#" className="text-sm font-medium hover:underline">
             Nosotros
-          </Link>
-          <Link href="#" className="text-sm font-medium hover:underline">
+          </Link> */}
+          <Link href="#footer" className="text-sm font-medium hover:underline">
             Contacto
           </Link>
         </nav>

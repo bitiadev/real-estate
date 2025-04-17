@@ -357,6 +357,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                         {images.map((_, index) => (
                           <button
                             key={index}
+                            title="Boton para cambiar imagen"
                             className={`h-1.5 rounded-full transition-all ${
                               index === currentImageIndex ? "w-6 bg-white" : "w-1.5 bg-white/60"
                             }`}
