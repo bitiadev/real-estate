@@ -95,12 +95,12 @@ export default function NuevaPropiedad() {
       }
 
       // Subir la imagen a Supabase Storage
-      const uploadedImage = await uploadPropertyImage(file, propertyId)
+      const uploadedImage = await uploadPropertyImage(file, propertyId!)
       if (!uploadedImage) throw new Error("Error al subir la imagen")
 
       // Guardar la referencia en la base de datos
       const isMainImage = images.length === 0 // La primera imagen será la principal
-      const imageId = await savePropertyImageReference(propertyId, uploadedImage.path, isMainImage)
+      const imageId = await savePropertyImageReference(propertyId!, uploadedImage.path, isMainImage)
       if (!imageId) throw new Error("Error al guardar la referencia de la imagen")
 
       // Actualizar el estado de las imágenes

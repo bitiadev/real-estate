@@ -12,7 +12,7 @@ export type UploadedImage = {
 /**
  * Sube una imagen al almacenamiento de Supabase
  */
-export async function uploadPropertyImage(file: File, propertyId: number | string): Promise<UploadedImage | null> {
+export async function uploadPropertyImage(file: File, propertyId: number): Promise<UploadedImage | null> {
   try {
     // Generar un nombre único para el archivo
     const fileExt = file.name.split(".").pop()
