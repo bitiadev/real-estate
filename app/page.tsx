@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import PropertyCard from "@/components/property-card"
 import { Building, Home, Search } from "lucide-react"
 import { getAllProperties } from "@/lib/property-service"
+import Hero from '@/components/Hero'
 
 // Hacer que la página sea dinámica para que se actualice con los datos más recientes
 export const dynamic = "force-dynamic"
@@ -23,10 +24,31 @@ export default async function HomePage() {
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 3)
 
+   // Configuración de imágenes para el carrusel del Hero
+  // Estas imágenes se mostrarán según el tipo de dispositivo (desktop, tablet, mobile)
+  const heroImages = {
+    desktop: [
+      '/images/hero/slide-1.jpg',
+      '/images/hero/slide-2.jpg',      
+    ],
+    tablet: [
+      '/images/hero/slide-1.jpg',
+      '/images/hero/slide-2.jpg',
+    ],
+    mobile: [
+      '/images/hero/slide-1.jpg',
+      '/images/hero/slide-2.jpg',
+    ],
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-gray-50 to-gray-100">
+      <Hero 
+        type="carousel" 
+        images={heroImages}
+      />
+      {/* <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-gray-50 to-gray-100">
         <div className="px-4 md:px-6 w-full">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
@@ -37,8 +59,7 @@ export default async function HomePage() {
                 Las mejores propiedades en venta y alquiler en un solo lugar
               </p>
             </div>
-
-            {/* Search Bar */}
+            
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4 mt-8">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
@@ -77,7 +98,7 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Featured Properties */}
       <section className="w-full py-12 md:py-24 bg-white">
