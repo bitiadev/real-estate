@@ -56,37 +56,39 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
 
   // Renderiza el carrusel de imágenes
   return (
-    <>
-    <div className="relative w-full h-screen bg-[var(--color-background)]">
-      {images[deviceType].map((image, index) => (
-        <Image
-          key={image}
-          src={image}
-          alt={`Hero image ${index + 1}`}
-          fill
-          priority
-          style={{ objectFit: 'cover' }}
-          className={`transition-opacity duration-1000 ${
-            index === currentIndex ? 'opacity-30' : 'opacity-0'
-          }`}
-        />
-      ))}
-     
-      {/* <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-gray-50 to-gray-100"> */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-gray-50 to-gray-100">
-        <div className="px-4 md:px-6 w-full">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+    <div className="relative w-full h-2/4 bg-[var(--color-background)]">
+      {/* Imágenes del carrusel como fondo */}
+      <div className="absolute inset-0">
+        {images[deviceType].map((image, index) => (
+          <Image
+            key={image}
+            src={image}
+            alt={`Hero image ${index + 1}`}
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+            className={`transition-opacity duration-1000 ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Contenido superpuesto */}
+      <section className="relative w-full py-12 md:py-24 lg:py-32 md:flex justify-center">
+        <div className="px-4 md:px-6 md:w-[60%]">
+        <div className="flex flex-col items-center space-y-4 text-center rounded-lg shadow-lg p-8" style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
+            <div className="space-y-2 ">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl z-10 text-orange-600 drop-shadow-xl">
                 Encuentra tu hogar ideal
               </h1>
-              <p className="mx-auto max-w-[700px] text-gray-900 md:text-xl">
+              <p className="mx-auto max-w-[700px] md:text-xl z-10 text-orange-600">
                 Las mejores propiedades en venta y alquiler en un solo lugar
               </p>
             </div>
 
-            {/* Search Bar */}
-            <div className="w-full max-w-3xl z-10 bg-white opacity-80 rounded-lg shadow-lg p-4 mt-8">
+            {/* Barra de búsqueda */}
+            <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
                   <Select defaultValue="TresArroyos">
@@ -125,9 +127,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
           </div>
         </div>
       </section>
-      </div>
-    </>
-    
+    </div>
   )
 }
 
