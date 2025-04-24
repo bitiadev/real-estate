@@ -40,3 +40,25 @@ CREATE POLICY "Imágenes visibles públicamente" ON property_images
   FOR SELECT USING (true);
 CREATE POLICY "Los usuarios autenticados pueden gestionar imágenes" ON property_images
   FOR ALL USING (auth.role() = 'authenticated');
+
+
+-- Tabla de leads (clientes potenciales)
+CREATE TABLE IF NOT EXISTS leads (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  property_type TEXT NOT NULL, --CHECK (property_type IN ('venta', 'alquiler')),
+  budget NUMERIC NOT NULL,
+  request_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  notes TEXT,
+  status TEXT NOT NULL DEFAULT 'pendiente' CHECK (status IN ('pendiente', 'en_proceso', 'resuelto', 'cancelado')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Políticas de seguridad (RLS)
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+
+-- Permitir a usuarios autenticados gestionar leads
+CREATE POLICY "Los usuarios autenticados pueden gestionar leads" ON leads
+  FOR ALL USING (auth.role() = 'authenticated');

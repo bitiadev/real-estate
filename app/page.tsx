@@ -44,10 +44,12 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
+  
       <Hero 
         type="carousel" 
         images={heroImages}
       />
+  
       {/* <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-gray-50 to-gray-100">
         <div className="px-4 md:px-6 w-full">
           <div className="flex flex-col items-center space-y-4 text-center">
@@ -101,7 +103,7 @@ export default async function HomePage() {
       </section> */}
 
       {/* Featured Properties */}
-      <section className="w-full py-12 md:py-24 bg-white">
+      <section className="w-full py-12 md:py-24 bg-white z-10">
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
@@ -135,7 +137,7 @@ export default async function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="w-full py-12 md:py-24 bg-gray-50">
+      <section className="w-full py-12 md:py-24 bg-gray-50 z-10">
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
