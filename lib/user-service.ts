@@ -1,4 +1,6 @@
-import { supabase } from "./supabase"
+"use server"
+
+import { supabase } from "./supabaseAdmin"
 
 export type User = {
   id: string

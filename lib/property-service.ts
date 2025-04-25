@@ -1,4 +1,4 @@
-import { supabase } from "./supabase"
+import { supabase } from "./supabaseClient"
 import { getPropertyImages } from "./storage-service"
 
 export type Property = {

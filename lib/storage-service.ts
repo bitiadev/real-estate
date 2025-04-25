@@ -1,4 +1,5 @@
-import { supabase } from "./supabase"
+
+import { supabase } from "./supabaseClient"
 import { v4 as uuidv4 } from "uuid"
 
 // Nombre del bucket donde se almacenarán las imágenes
