@@ -29,7 +29,9 @@ export default async function HomePage() {
   const heroImages = {
     desktop: [
       '/images/hero/slide-1.jpg',
-      '/images/hero/slide-2.jpg',      
+      '/images/hero/slide-2.jpg',
+      '/images/hero/slide-3.jpg',
+      '/images/hero/slide-4.jpg',      
     ],
     tablet: [
       '/images/hero/slide-1.jpg',
@@ -38,6 +40,8 @@ export default async function HomePage() {
     mobile: [
       '/images/hero/slide-1.jpg',
       '/images/hero/slide-2.jpg',
+      '/images/hero/slide-3.jpg',
+      '/images/hero/slide-4.jpg',
     ],
   }
 
@@ -48,60 +52,8 @@ export default async function HomePage() {
       <Hero 
         type="carousel" 
         images={heroImages}
-      />
-  
-      {/* <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-gray-50 to-gray-100">
-        <div className="px-4 md:px-6 w-full">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                Encuentra tu hogar ideal
-              </h1>
-              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl">
-                Las mejores propiedades en venta y alquiler en un solo lugar
-              </p>
-            </div>
-            
-            <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4 mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-2">
-                  <Select defaultValue="TresArroyos">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Ubicacion" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="TresArroyos">Tres Arroyos</SelectItem>
-                      <SelectItem value="Claromeco">Claromeco</SelectItem>
-                      <SelectItem value="Otras">Otras</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Select defaultValue="all">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      <SelectItem value="venta">Venta</SelectItem>
-                      <SelectItem value="alquiler">Alquiler</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Button className="w-full" asChild>
-                    <Link href="/propiedades">
-                      <Search className="mr-2 h-4 w-4" />
-                      Buscar
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
+      />  
+     
       {/* Featured Properties */}
       <section className="w-full py-12 md:py-24 bg-white z-10">
         <div className="px-4 md:px-6">

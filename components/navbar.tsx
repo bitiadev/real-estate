@@ -18,11 +18,11 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             {/* <Building className="h-6 w-6" /> */}
             <Image
-              src="/logo.svg"
+              src="/Logo.svg"
               alt="Logo"
-              width={70}
+              width={90}
               height={70}
-              className="block h-10 w-10 md:ml-4 md:h-20 md:w-20"
+              className="block h-12 w-16 md:ml-4 md:h-20 md:w-28"
             />
             {/* <span className="text-lg font-bold">{siteConfig.empresa}</span> */}
           </Link>
@@ -65,7 +65,7 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   {/* <Building className="h-6 w-6" /> */}
                   <Image
-                    src="/logo.svg"
+                    src="/Logo.svg"
                     alt="Logo"
                     width={70}
                     height={70}

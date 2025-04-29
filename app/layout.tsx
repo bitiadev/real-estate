@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"], preload: false })
 
 export const metadata = {
   title: "Inmobiliaria - Propiedades en venta y alquiler",
-  description: "Encuentra las mejores propiedades en venta y alquiler",
+  description: "Encuentra las mejores propiedades en venta y alquiler en Tres Arroyos, Buenos Aires y zona",
 }
 
 export default function RootLayout({
@@ -22,6 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="light">
+      <head>
+        <link rel="icon" href="/smallLogo3.png" type="image/png" />
+      </head>
       <body className={inter.className}>
         {/* <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange> */}
           <AuthProvider>
