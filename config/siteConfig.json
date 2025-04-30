@@ -2,10 +2,11 @@
   "empresa": "Miguel Yitani Propiedades",
   "logo": "/logo.svg",
   "slogan": "Soluciones que inspiran",
-  "telefono": "+54 2983 526754",
+  "telefono": "+542983526754",
   "domicilio": "Lavalle 155, Tres Arroyos, Buenos Aires, Argentina",
   "direccionGoogleMaps": "https://maps.app.goo.gl/6ungaUmPCFUFhrKp8",
   "instagram": "https://instagram.com/miguelyitanipropiedades/",
   "facebook": "https://facebook.com/miguel.yitaniPropiedades",
-  "email": "miguelyitanipropiedades@gmail.com"
+  "email": "miguelyitanipropiedades@gmail.com",
+  "agente" : "Miguel Yitani"
 }

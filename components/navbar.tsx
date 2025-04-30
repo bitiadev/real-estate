@@ -18,7 +18,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             {/* <Building className="h-6 w-6" /> */}
             <Image
-              src="/Logo.svg"
+              src="/logo.svg"
               alt="Logo"
               width={90}
               height={70}
