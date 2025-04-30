@@ -84,7 +84,7 @@ export default function NuevaPropiedad() {
             bedrooms: 0,
             bathrooms: 0,
             area: 0,
-            status: "borrador",
+            status: "activa",
           })
           .select("id")
           .single()
