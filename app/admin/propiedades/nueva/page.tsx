@@ -15,13 +15,21 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import { supabase } from "@/lib/supabaseClient"
 import { useToast } from "@/hooks/use-toast"
-import ImageUpload from "@/components/image-upload"
+// import ImageUpload from "@/components/image-upload" // Puedes comentar o eliminar si no lo usas directamente
 import {
-  uploadPropertyImage,
-  savePropertyImageReference,
-  setMainImage,
-  deletePropertyImageComplete,
+  uploadPropertyImage, // Usaremos esta función para subir al storage
+  savePropertyImageReference, // <-- Ahora usaremos esta función para guardar la referencia
+  // setMainImage, // No necesario directamente aquí al crear
+  // deletePropertyImageComplete, // No necesario directamente aquí al crear
 } from "@/lib/storage-service"
+
+interface UploadedImage {
+  id?: number; // Opcional, si guardas referencia temporal en DB (aunque el nuevo enfoque evita esto)
+  url: string;
+  name?: string; // Nombre del archivo original
+  main_image: boolean;
+  file?: File; // Guardar el objeto File para la subida posterior
+}
 
 export default function NuevaPropiedad() {
   const router = useRouter()
@@ -45,8 +53,7 @@ export default function NuevaPropiedad() {
       heating: false,
     },
   })
-  const [images, setImages] = useState<Array<{ id: number; url: string; main_image: boolean }>>([])
-  const [tempPropertyId, setTempPropertyId] = useState<number | null>(null)
+  const [images, setImages] = useState<UploadedImage[]>([]) // Usaremos este estado para las imágenes subidas
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -67,116 +74,63 @@ export default function NuevaPropiedad() {
     }))
   }
 
-  const handleImageUpload = async (file: File) => {
-    try {
-      // Si no hay un ID de propiedad temporal, crear uno
-      let propertyId = tempPropertyId
-      if (!propertyId) {
-        // Crear una propiedad temporal en la base de datos
-        const { data, error } = await supabase
-          .from("properties")
-          .insert({
-            title: "Propiedad temporal",
-            description: "",
-            price: 0,
-            type: "venta",
-            location: "",
-            bedrooms: 0,
-            bathrooms: 0,
-            area: 0,
-            status: "activa",
-          })
-          .select("id")
-          .single()
+  // Modificación para manejar la selección de archivos y previsualización
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
 
-        if (error) throw error
-        propertyId = data.id
-        setTempPropertyId(propertyId)
-      }
+    const files = Array.from(e.target.files);
+    const newImages: UploadedImage[] = files.map(file => ({
+        url: URL.createObjectURL(file), // Crear URL temporal para previsualización
+        name: file.name,
+        main_image: false, // Se establecerá la principal después
+        file: file, // Guardar el objeto File para la subida posterior
+    }));
 
-      // Subir la imagen a Supabase Storage
-      const uploadedImage = await uploadPropertyImage(file, propertyId!)
-      if (!uploadedImage) throw new Error("Error al subir la imagen")
-
-      // Guardar la referencia en la base de datos
-      const isMainImage = images.length === 0 // La primera imagen será la principal
-      const imageId = await savePropertyImageReference(propertyId!, uploadedImage.path, isMainImage)
-      if (!imageId) throw new Error("Error al guardar la referencia de la imagen")
-
-      // Actualizar el estado de las imágenes
-      setImages((prev) => [...prev, { id: imageId, url: uploadedImage.url, main_image: isMainImage }])
-    } catch (error) {
-      console.error("Error al subir la imagen:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo subir la imagen. Inténtalo de nuevo.",
-        variant: "destructive",
-      })
-    }
-  }
-
-  const handleRemoveImage = async (index: number) => {
-    try {
-      const imageToRemove = images[index]
-      const success = await deletePropertyImageComplete(imageToRemove.id)
-
-      if (!success) throw new Error("Error al eliminar la imagen")
-
-      // Si era la imagen principal y hay más imágenes, establecer la primera como principal
-      if (imageToRemove.main_image && images.length > 1 && tempPropertyId) {
-        const nextMainImage = images.find((img, i) => i !== index)
-        if (nextMainImage) {
-          await setMainImage(nextMainImage.id, tempPropertyId)
+    setImages((prev) => {
+        const updatedImages = [...prev, ...newImages];
+        // Si no había imágenes antes, establecer la primera nueva como principal
+        if (prev.length === 0 && newImages.length > 0) {
+             updatedImages[0].main_image = true;
         }
+        return updatedImages;
+    });
+
+    // Limpiar el input de archivo para poder subir los mismos archivos de nuevo si es necesario
+    e.target.value = '';
+  }
+
+  const handleRemoveImage = (index: number) => {
+    const imageToRemove = images[index];
+
+    // Revocar la URL temporal para liberar memoria
+    if (imageToRemove.url.startsWith('blob:')) {
+        URL.revokeObjectURL(imageToRemove.url);
+    }
+
+    setImages((prev) => {
+      const newImages = prev.filter((_, i) => i !== index);
+      // Si la imagen eliminada era la principal y quedan imágenes, establecer la primera como principal
+      if (imageToRemove.main_image && newImages.length > 0) {
+        newImages[0].main_image = true;
       }
+      return newImages;
+    });
 
-      // Actualizar el estado
-      setImages((prev) => {
-        const newImages = [...prev]
-        newImages.splice(index, 1)
-
-        // Si era la principal, actualizar la primera como principal
-        if (imageToRemove.main_image && newImages.length > 0) {
-          newImages[0] = { ...newImages[0], main_image: true }
-        }
-
-        return newImages
-      })
-    } catch (error) {
-      console.error("Error al eliminar la imagen:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar la imagen. Inténtalo de nuevo.",
-        variant: "destructive",
-      })
-    }
+    toast({
+        title: "Imagen eliminada",
+        description: "La imagen ha sido eliminada de la lista.",
+    });
   }
 
-  const handleSetMainImage = async (index: number) => {
-    try {
-      if (!tempPropertyId) return
-
-      const imageToSetAsMain = images[index]
-      const success = await setMainImage(imageToSetAsMain.id, tempPropertyId)
-
-      if (!success) throw new Error("Error al establecer la imagen principal")
-
-      // Actualizar el estado
-      setImages((prev) =>
-        prev.map((img, i) => ({
-          ...img,
-          main_image: i === index,
-        })),
-      )
-    } catch (error) {
-      console.error("Error al establecer la imagen principal:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo establecer la imagen principal. Inténtalo de nuevo.",
-        variant: "destructive",
-      })
-    }
+  const handleSetMainImage = (index: number) => {
+    setImages((prev) =>
+      prev.map((img, i) => ({
+        ...img,
+        main_image: i === index,
+      })),
+    );
   }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -194,64 +148,91 @@ export default function NuevaPropiedad() {
         return
       }
 
-      // Si hay un ID de propiedad temporal, actualizar esa propiedad
-      if (tempPropertyId) {
-        const { error } = await supabase
-          .from("properties")
-          .update({
-            title: formData.title,
-            description: formData.description,
-            price: Number.parseFloat(formData.price),
-            type: formData.type,
-            location: formData.location,
-            bedrooms: Number.parseInt(formData.bedrooms),
-            bathrooms: Number.parseInt(formData.bathrooms),
-            area: Number.parseFloat(formData.area),
-            features: formData.features,
-            status: "activa", // Cambiar de borrador a activa
-          })
-          .eq("id", tempPropertyId)
+      // 1. Crear la propiedad principal en la base de datos
+      const propertyData = {
+        title: formData.title,
+        description: formData.description,
+        price: Number.parseFloat(formData.price),
+        type: formData.type,
+        location: formData.location,
+        bedrooms: Number.parseInt(formData.bedrooms),
+        bathrooms: Number.parseInt(formData.bathrooms),
+        area: Number.parseFloat(formData.area),
+        features: formData.features,
+        status: "activa", // O "borrador" si prefieres un paso de publicación
+      };
 
-        if (error) throw error
+      const { data: newProperty, error: propertyError } = await supabase
+        .from("properties")
+        .insert([propertyData]) // Insertar como array
+        .select("id")
+        .single();
 
-        toast({
-          title: "Propiedad creada",
-          description: "La propiedad ha sido creada exitosamente.",
-        })
-      } else {
-        // Si no hay un ID temporal, crear una nueva propiedad
-        const { data, error } = await supabase
-          .from("properties")
-          .insert({
-            title: formData.title,
-            description: formData.description,
-            price: Number.parseFloat(formData.price),
-            type: formData.type,
-            location: formData.location,
-            bedrooms: Number.parseInt(formData.bedrooms),
-            bathrooms: Number.parseInt(formData.bathrooms),
-            area: Number.parseFloat(formData.area),
-            features: formData.features,
-            status: "activa",
-          })
-          .select("id")
-          .single()
+      if (propertyError) throw propertyError;
 
-        if (error) throw error
+      const newPropertyId = newProperty.id;
 
-        toast({
-          title: "Propiedad creada",
-          description: "La propiedad ha sido creada exitosamente.",
-        })
+      // 2. Subir las imágenes al storage y GUARDAR SUS REFERENCIAS USANDO savePropertyImageReference
+      const imageUploadAndSavePromises = images.map(async (img) => {
+          if (!img.file) {
+              console.warn("Skipping image without file object:", img);
+              return null; // O manejar el error
+          }
+          // Subir la imagen al storage, asociándola directamente con el newPropertyId
+          const uploadedImage = await uploadPropertyImage(img.file, newPropertyId);
+          if (!uploadedImage) {
+              console.error("Error uploading image to storage:", img.name);
+              return null; // O manejar el error
+          }
+
+          // --- Usar savePropertyImageReference para guardar la referencia ---
+          console.log("Attempting to save image reference using savePropertyImageReference:");
+          console.log("  property_id:", newPropertyId);
+          console.log("  uploadedImage.path:", uploadedImage.path); // savePropertyImageReference parece usar el path
+          console.log("  is_main:", img.main_image);
+
+          // Llama a la función existente que funciona en la página de edición
+          const imageId = await savePropertyImageReference(newPropertyId, uploadedImage.path, img.main_image);
+
+          if (!imageId) {
+              console.error("Error saving image reference via savePropertyImageReference:", { propertyId: newPropertyId, path: uploadedImage.path, isMain: img.main_image });
+              // Agregar logging del objeto de error completo si savePropertyImageReference lo devuelve
+              // console.log("Image save error object:", errorFromSaveFunction); // Si savePropertyImageReference devuelve un error
+              // Decide si quieres lanzar un error aquí o continuar
+          } else {
+              console.log("Image reference saved successfully with ID:", imageId);
+          }
+          return imageId; // Retornar el ID de la referencia guardada
+      });
+
+      // Esperar a que todas las operaciones de subida y guardado de referencia terminen
+      const savedImageReferences = await Promise.all(imageUploadAndSavePromises);
+
+      // Opcional: Filtrar referencias nulas si hubo errores individuales
+      const successfulImageSaves = savedImageReferences.filter(id => id !== null);
+
+      if (successfulImageSaves.length === 0 && images.length > 0) {
+           // Considerar si esto debe ser un error fatal o solo una advertencia
+           console.warn("No image references were successfully saved.");
+           // Dependiendo de tu lógica, podrías querer eliminar la propiedad recién creada si no se guardó ninguna imagen.
       }
+
+
+      toast({
+        title: "Propiedad creada",
+        description: "La propiedad y sus imágenes han sido creadas exitosamente.",
+      })
 
       // Redirigir al dashboard
       router.push("/admin/dashboard")
+
     } catch (error) {
       console.error("Error al guardar la propiedad:", error)
+      // Mejorar el mensaje de error si es un error de Supabase
+      const errorMessage = (error as any)?.message || "Ocurrió un error al guardar la propiedad. Inténtalo de nuevo.";
       toast({
         title: "Error",
-        description: "Ocurrió un error al guardar la propiedad. Inténtalo de nuevo.",
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {
@@ -471,13 +452,35 @@ export default function NuevaPropiedad() {
 
               <div className="grid gap-3">
                 <Label>Imágenes</Label>
-                <ImageUpload
-                  onImageUpload={handleImageUpload}
-                  onRemoveImage={handleRemoveImage}
-                  onSetMainImage={handleSetMainImage}
-                  images={images}
-                  maxImages={10}
-                />
+                {/* Input para seleccionar archivos */}
+                <div>
+                    <input type="file" multiple onChange={handleFileSelect} accept="image/*" />
+                </div>
+                {/* Previsualización de imágenes subidas y selección de principal */}
+                <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {images.map((image, index) => (
+                        <div key={index} className={`relative border ${image.main_image ? 'border-blue-500' : 'border-gray-200'} rounded-md overflow-hidden`}>
+                            <img src={image.url} alt={`Propiedad ${index + 1}`} className="w-full h-32 object-cover" />
+                            <div className="absolute top-1 right-1 flex space-x-1">
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={() => handleSetMainImage(index)}
+                                    disabled={image.main_image}
+                                >
+                                    {image.main_image ? 'Principal' : 'Establecer Principal'}
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => handleRemoveImage(index)}
+                                >
+                                    Eliminar
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
               </div>
             </div>
 
@@ -485,7 +488,7 @@ export default function NuevaPropiedad() {
               <Button variant="outline" type="button" onClick={() => router.push("/admin/dashboard")}>
                 Cancelar
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading || images.length === 0}>
                 {loading ? (
                   <span className="flex items-center">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

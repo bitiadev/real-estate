@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-
+import React from "react" // Asegúrate de que React esté importado correctamente
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -25,8 +24,10 @@ import {
 } from "@/lib/storage-service"
 import { getPropertyById } from "@/lib/property-service"
 
+// Modificación aquí: Usar React.use y desestructurar directamente
 export default function EditarPropiedad({ params }: { params: { id: string } }) {
-  const propertyId = Number.parseInt(params.id)
+  // Desestructurar 'id' directamente del resultado de React.use(params)
+  const { id: propertyId } = React.use(params as any) as { id: string }; // Forzar el tipo para TS
   const router = useRouter()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -57,7 +58,8 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
     const loadProperty = async () => {
       setIsLoadingProperty(true)
       try {
-        const property = await getPropertyById(propertyId)
+        // Asegúrate de que propertyId es un número si tu función lo espera así
+        const property = await getPropertyById(Number.parseInt(propertyId))
 
         if (!property) {
           toast({
@@ -91,7 +93,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
         })
 
         // Cargar imágenes
-        const propertyImages = await getPropertyImages(propertyId)
+        const propertyImages = await getPropertyImages(Number.parseInt(propertyId))
         setImages(
           propertyImages.map((img) => ({
             id: img.id,
@@ -112,7 +114,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
     }
 
     loadProperty()
-  }, [propertyId, router, toast])
+  }, [propertyId, router, toast]) // propertyId ya es el valor resuelto aquí
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -136,12 +138,14 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
   const handleImageUpload = async (file: File) => {
     try {
       // Subir la imagen a Supabase Storage
-      const uploadedImage = await uploadPropertyImage(file, propertyId)
+      // Aquí usamos el propertyId resuelto
+      const uploadedImage = await uploadPropertyImage(file, Number(propertyId))
       if (!uploadedImage) throw new Error("Error al subir la imagen")
 
       // Guardar la referencia en la base de datos
-      const isMainImage = images.length === 0 // La primera imagen será la principal
-      const imageId = await savePropertyImageReference(propertyId, uploadedImage.path, isMainImage)
+      // Aquí usamos el propertyId resuelto
+      const isMainImage = images.length === 0 // La primera imagen subida en edición será principal si no hay otras
+      const imageId = await savePropertyImageReference(Number(propertyId), uploadedImage.path, isMainImage)
       if (!imageId) throw new Error("Error al guardar la referencia de la imagen")
 
       // Actualizar el estado de las imágenes
@@ -167,7 +171,8 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
       if (imageToRemove.main_image && images.length > 1) {
         const nextMainImage = images.find((img, i) => i !== index)
         if (nextMainImage) {
-          await setMainImage(nextMainImage.id, propertyId)
+          // Aquí usamos el propertyId resuelto
+          await setMainImage(nextMainImage.id, Number(propertyId))
         }
       }
 
@@ -196,7 +201,8 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
   const handleSetMainImage = async (index: number) => {
     try {
       const imageToSetAsMain = images[index]
-      const success = await setMainImage(imageToSetAsMain.id, propertyId)
+      // Aquí usamos el propertyId resuelto
+      const success = await setMainImage(imageToSetAsMain.id, Number(propertyId))
 
       if (!success) throw new Error("Error al establecer la imagen principal")
 
@@ -234,6 +240,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
       }
 
       // Actualizar la propiedad
+      // Aquí usamos el propertyId resuelto
       const { error } = await supabase
         .from("properties")
         .update({
@@ -249,7 +256,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
           status: formData.status,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", propertyId)
+        .eq("id", propertyId) // Usamos el propertyId resuelto
 
       if (error) throw error
 
@@ -473,7 +480,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
                     />
                     <label
                       htmlFor="security"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity70"
                     >
                       Seguridad 24hs
                     </label>
