@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -69,10 +68,19 @@ export default function ImageUpload({
   }
 
   const processFiles = async (files: File[]) => {
-    // Filtrar solo archivos de imagen
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"))
+    const MAX_FILE_SIZE_MB = 5 // Tamaño máximo permitido por archivo
+    const imageFiles = files.filter((file) => {
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        toast({
+          title: "Archivo demasiado grande",
+          description: `El archivo ${file.name} supera el límite de ${MAX_FILE_SIZE_MB} MB.`,
+          variant: "destructive",
+        })
+        return false
+      }
+      return file.type.startsWith("image/")
+    })
 
-    // Verificar si hay espacio disponible
     const availableSlots = maxImages - images.length
     const filesToUpload = imageFiles.slice(0, availableSlots)
 
@@ -81,7 +89,6 @@ export default function ImageUpload({
     setIsUploading(true)
 
     try {
-      // Procesar cada archivo
       for (const file of filesToUpload) {
         await onImageUpload(file)
       }
@@ -102,7 +109,8 @@ export default function ImageUpload({
     }
   }
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation() // Prevenir propagación del evento
     fileInputRef.current?.click()
   }
 
@@ -131,6 +139,7 @@ export default function ImageUpload({
         <p className="text-sm text-gray-500">Arrastra y suelta imágenes aquí o haz clic para seleccionar archivos</p>
         <p className="text-xs text-gray-400 mt-1">PNG, JPG o WEBP (máx. 5MB por archivo)</p>
         <Button
+          type="button"
           variant="outline"
           size="sm"
           className="mt-4"
@@ -165,13 +174,13 @@ export default function ImageUpload({
               {/* Botones de acción */}
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 {onRemoveImage && (
-                  <Button variant="destructive" size="icon" className="h-8 w-8" onClick={() => onRemoveImage(index)}>
+                  <Button type="button" variant="destructive" size="icon" className="h-8 w-8" onClick={() => onRemoveImage(index)}>
                     <X className="h-4 w-4" />
                   </Button>
                 )}
 
                 {onSetMainImage && !image.main_image && (
-                  <Button variant="secondary" size="icon" className="h-8 w-8" onClick={() => onSetMainImage(index)}>
+                  <Button type="button" variant="secondary" size="icon" className="h-8 w-8" onClick={() => onSetMainImage(index)}>
                     <Star className="h-4 w-4" />
                   </Button>
                 )}

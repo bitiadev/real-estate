@@ -1,7 +1,6 @@
 "use client"
 
-import React from "react" // Asegúrate de que React esté importado correctamente
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -12,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft, Loader2 } from "lucide-react"
-import { supabase } from "@/lib/supabaseClient"
 import { useToast } from "@/hooks/use-toast"
 import ImageUpload from "@/components/image-upload"
 import {
@@ -23,15 +21,14 @@ import {
   getPropertyImages,
 } from "@/lib/storage-service"
 import { getPropertyById } from "@/lib/property-service"
+import { supabase } from "@/lib/supabaseClient"
 
-// Modificación aquí: Usar React.use y desestructurar directamente
-export default function EditarPropiedad({ params }: { params: { id: string } }) {
-  // Desestructurar 'id' directamente del resultado de React.use(params)
-  const { id: propertyId } = React.use(params as any) as { id: string }; // Forzar el tipo para TS
+export default function EditarPropiedad({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
   const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
+  const [propertyId, setPropertyId] = useState<number | null>(null)
   const [isLoadingProperty, setIsLoadingProperty] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -53,14 +50,23 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
   })
   const [images, setImages] = useState<Array<{ id: number; url: string; main_image: boolean }>>([])
 
+  // Resolver params y obtener propertyId
+  useEffect(() => {
+    const fetchParams = async () => {
+      const resolvedParams = await params
+      setPropertyId(Number(resolvedParams.id))
+    }
+    fetchParams()
+  }, [params])
+
   // Cargar datos de la propiedad
   useEffect(() => {
+    if (!propertyId) return
+
     const loadProperty = async () => {
       setIsLoadingProperty(true)
       try {
-        // Asegúrate de que propertyId es un número si tu función lo espera así
-        const property = await getPropertyById(Number.parseInt(propertyId))
-
+        const property = await getPropertyById(propertyId)
         if (!property) {
           toast({
             title: "Error",
@@ -93,7 +99,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
         })
 
         // Cargar imágenes
-        const propertyImages = await getPropertyImages(Number.parseInt(propertyId))
+        const propertyImages = await getPropertyImages(propertyId)
         setImages(
           propertyImages.map((img) => ({
             id: img.id,
@@ -114,7 +120,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
     }
 
     loadProperty()
-  }, [propertyId, router, toast]) // propertyId ya es el valor resuelto aquí
+  }, [propertyId, router, toast])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -137,18 +143,13 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
 
   const handleImageUpload = async (file: File) => {
     try {
-      // Subir la imagen a Supabase Storage
-      // Aquí usamos el propertyId resuelto
-      const uploadedImage = await uploadPropertyImage(file, Number(propertyId))
+      const uploadedImage = await uploadPropertyImage(file, propertyId!)
       if (!uploadedImage) throw new Error("Error al subir la imagen")
 
-      // Guardar la referencia en la base de datos
-      // Aquí usamos el propertyId resuelto
-      const isMainImage = images.length === 0 // La primera imagen subida en edición será principal si no hay otras
-      const imageId = await savePropertyImageReference(Number(propertyId), uploadedImage.path, isMainImage)
+      const isMainImage = images.length === 0
+      const imageId = await savePropertyImageReference(propertyId!, uploadedImage.path, isMainImage)
       if (!imageId) throw new Error("Error al guardar la referencia de la imagen")
 
-      // Actualizar el estado de las imágenes
       setImages((prev) => [...prev, { id: imageId, url: uploadedImage.url, main_image: isMainImage }])
     } catch (error) {
       console.error("Error al subir la imagen:", error)
@@ -160,33 +161,26 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
     }
   }
 
-  const handleRemoveImage = async (index: number) => {
+  const handleRemoveImage = async (index: number, e?: React.MouseEvent<HTMLButtonElement>) => {
+    if (e) e.stopPropagation() // Prevenir propagación del evento si se pasa
+  
+    const imageToRemove = images[index]
+  
     try {
-      const imageToRemove = images[index]
       const success = await deletePropertyImageComplete(imageToRemove.id)
-
       if (!success) throw new Error("Error al eliminar la imagen")
-
-      // Si era la imagen principal y hay más imágenes, establecer la primera como principal
-      if (imageToRemove.main_image && images.length > 1) {
-        const nextMainImage = images.find((img, i) => i !== index)
-        if (nextMainImage) {
-          // Aquí usamos el propertyId resuelto
-          await setMainImage(nextMainImage.id, Number(propertyId))
-        }
-      }
-
-      // Actualizar el estado
+  
       setImages((prev) => {
-        const newImages = [...prev]
-        newImages.splice(index, 1)
-
-        // Si era la principal, actualizar la primera como principal
+        const newImages = prev.filter((_, i) => i !== index)
         if (imageToRemove.main_image && newImages.length > 0) {
-          newImages[0] = { ...newImages[0], main_image: true }
+          newImages[0].main_image = true
         }
-
         return newImages
+      })
+  
+      toast({
+        title: "Imagen eliminada",
+        description: "La imagen ha sido eliminada correctamente.",
       })
     } catch (error) {
       console.error("Error al eliminar la imagen:", error)
@@ -198,21 +192,26 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
     }
   }
 
-  const handleSetMainImage = async (index: number) => {
+  const handleSetMainImage = async (index: number, e?: React.MouseEvent<HTMLButtonElement>) => {
+    if (e) e.stopPropagation() // Prevenir propagación del evento si se pasa
+  
+    const imageToSetAsMain = images[index]
+  
     try {
-      const imageToSetAsMain = images[index]
-      // Aquí usamos el propertyId resuelto
-      const success = await setMainImage(imageToSetAsMain.id, Number(propertyId))
-
+      const success = await setMainImage(imageToSetAsMain.id, propertyId!)
       if (!success) throw new Error("Error al establecer la imagen principal")
-
-      // Actualizar el estado
+  
       setImages((prev) =>
         prev.map((img, i) => ({
           ...img,
           main_image: i === index,
         })),
       )
+  
+      toast({
+        title: "Imagen principal actualizada",
+        description: "La imagen principal ha sido actualizada correctamente.",
+      })
     } catch (error) {
       console.error("Error al establecer la imagen principal:", error)
       toast({
@@ -228,7 +227,6 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
     setLoading(true)
 
     try {
-      // Validar que haya al menos una imagen
       if (images.length === 0) {
         toast({
           title: "Error",
@@ -239,8 +237,6 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
         return
       }
 
-      // Actualizar la propiedad
-      // Aquí usamos el propertyId resuelto
       const { error } = await supabase
         .from("properties")
         .update({
@@ -256,7 +252,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
           status: formData.status,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", propertyId) // Usamos el propertyId resuelto
+        .eq("id", propertyId)
 
       if (error) throw error
 
@@ -265,7 +261,6 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
         description: "La propiedad ha sido actualizada exitosamente.",
       })
 
-      // Redirigir al dashboard
       router.push("/admin/dashboard")
     } catch (error) {
       console.error("Error al actualizar la propiedad:", error)
@@ -303,6 +298,7 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
+              {/* Campos del formulario */}
               <div className="grid gap-3">
                 <Label htmlFor="title">Título</Label>
                 <Input
@@ -314,208 +310,108 @@ export default function EditarPropiedad({ params }: { params: { id: string } }) 
                   onChange={handleInputChange}
                 />
               </div>
-
               <div className="grid gap-3">
                 <Label htmlFor="description">Descripción</Label>
                 <Textarea
                   id="description"
                   name="description"
-                  placeholder="Describe la propiedad en detalle"
-                  rows={4}
+                  placeholder="Descripción de la propiedad"
                   required
                   value={formData.description}
                   onChange={handleInputChange}
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="price">Precio</Label>
-                  <Input
-                    id="price"
-                    name="price"
-                    type="number"
-                    placeholder="Ej: 250000"
-                    required
-                    value={formData.price}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="grid gap-3">
-                  <Label htmlFor="type">Tipo</Label>
-                  <Select value={formData.type} onValueChange={(value) => handleSelectChange("type", value)}>
-                    <SelectTrigger id="type">
-                      <SelectValue placeholder="Selecciona el tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="venta">Venta</SelectItem>
-                      <SelectItem value="alquiler">Alquiler</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="grid gap-3">
+                <Label htmlFor="price">Precio</Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  placeholder="Ej: 250000"
+                  required
+                  value={formData.price}
+                  onChange={handleInputChange}
+                />
               </div>
-
+              <div className="grid gap-3">
+                <Label htmlFor="type">Tipo</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => handleSelectChange("type", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="venta">Venta</SelectItem>
+                    <SelectItem value="alquiler">Alquiler</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="grid gap-3">
                 <Label htmlFor="location">Ubicación</Label>
                 <Input
                   id="location"
                   name="location"
-                  placeholder="Ej: Palermo, Buenos Aires"
+                  placeholder="Ej: Ciudad, País"
                   required
                   value={formData.location}
                   onChange={handleInputChange}
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="bedrooms">Dormitorios</Label>
-                  <Input
-                    id="bedrooms"
-                    name="bedrooms"
-                    type="number"
-                    placeholder="Ej: 3"
-                    required
-                    value={formData.bedrooms}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="grid gap-3">
-                  <Label htmlFor="bathrooms">Baños</Label>
-                  <Input
-                    id="bathrooms"
-                    name="bathrooms"
-                    type="number"
-                    placeholder="Ej: 2"
-                    required
-                    value={formData.bathrooms}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="grid gap-3">
-                  <Label htmlFor="area">Superficie (m²)</Label>
-                  <Input
-                    id="area"
-                    name="area"
-                    type="number"
-                    placeholder="Ej: 180"
-                    required
-                    value={formData.area}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
               <div className="grid gap-3">
-                <Label>Estado</Label>
-                <Select value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
-                  <SelectTrigger id="status">
-                    <SelectValue placeholder="Selecciona el estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="activa">Activa</SelectItem>
-                    {formData.type === "venta" ? (
-                      <SelectItem value="vendida">Vendida</SelectItem>
-                    ) : (
-                      <SelectItem value="alquilada">Alquilada</SelectItem>
-                    )}
-                    <SelectItem value="borrador">Borrador</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="bedrooms">Habitaciones</Label>
+                <Input
+                  id="bedrooms"
+                  name="bedrooms"
+                  type="number"
+                  placeholder="Ej: 3"
+                  required
+                  value={formData.bedrooms}
+                  onChange={handleInputChange}
+                />
               </div>
-
+              <div className="grid gap-3">
+                <Label htmlFor="bathrooms">Baños</Label>
+                <Input
+                  id="bathrooms"
+                  name="bathrooms"
+                  type="number"
+                  placeholder="Ej: 2"
+                  required
+                  value={formData.bathrooms}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="area">Área (m²)</Label>
+                <Input
+                  id="area"
+                  name="area"
+                  type="number"
+                  placeholder="Ej: 120"
+                  required
+                  value={formData.area}
+                  onChange={handleInputChange}
+                />
+              </div>
               <div className="grid gap-3">
                 <Label>Características</Label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="pool"
-                      checked={formData.features.pool}
-                      onCheckedChange={(checked) => handleCheckboxChange("pool", checked as boolean)}
-                    />
-                    <label
-                      htmlFor="pool"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Piscina
-                    </label>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="garden"
-                      checked={formData.features.garden}
-                      onCheckedChange={(checked) => handleCheckboxChange("garden", checked as boolean)}
-                    />
-                    <label
-                      htmlFor="garden"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Jardín
-                    </label>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="garage"
-                      checked={formData.features.garage}
-                      onCheckedChange={(checked) => handleCheckboxChange("garage", checked as boolean)}
-                    />
-                    <label
-                      htmlFor="garage"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Garage
-                    </label>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="security"
-                      checked={formData.features.security}
-                      onCheckedChange={(checked) => handleCheckboxChange("security", checked as boolean)}
-                    />
-                    <label
-                      htmlFor="security"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity70"
-                    >
-                      Seguridad 24hs
-                    </label>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="airConditioning"
-                      checked={formData.features.airConditioning}
-                      onCheckedChange={(checked) => handleCheckboxChange("airConditioning", checked as boolean)}
-                    />
-                    <label
-                      htmlFor="airConditioning"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Aire acondicionado
-                    </label>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="heating"
-                      checked={formData.features.heating}
-                      onCheckedChange={(checked) => handleCheckboxChange("heating", checked as boolean)}
-                    />
-                    <label
-                      htmlFor="heating"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Calefacción
-                    </label>
-                  </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.keys(formData.features).map((feature) => (
+                    <div key={feature} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={feature}
+                        checked={formData.features[feature as keyof typeof formData.features]}
+                        onCheckedChange={(checked) =>
+                          handleCheckboxChange(feature, checked as boolean)
+                        }
+                      />
+                      <Label htmlFor={feature}>{feature}</Label>
+                    </div>
+                  ))}
                 </div>
               </div>
-
               <div className="grid gap-3">
                 <Label>Imágenes</Label>
                 <ImageUpload
