@@ -219,7 +219,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   if (isLoading) {
     return (
-      <div className="px-4 py-8 md:px-6 md:py-12 flex justify-center items-center min-h-[50vh]">
+      <div className="px-4 py-8 md:px-6 md:py-12 flex justify-center items-center min-h-[50vh] mx-auto">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto text-gray-400 mb-4" />
           <p className="text-gray-500">Cargando propiedad...</p>
@@ -230,7 +230,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   if (!property) {
     return (
-      <div className="flex justify-center px-4 py-8 md:px-6 md:py-12">
+      <div className="flex justify-center px-4 py-8 md:px-6 md:py-12 mx-auto">
         <Link href="/propiedades" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver a propiedades

@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Building, Home, LogOut, Menu, Settings, User, X, UserPlus } from "lucide-react"
+import { Building, Home, LogOut, Menu, Settings, User, X, UserPlus, Chrome, Globe } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useToast } from "@/hooks/use-toast"
 
@@ -103,6 +103,18 @@ export default function AdminSidebar() {
                 <Settings className="h-5 w-5 mr-2" />
                 Configuración
               </Link>
+              <Link
+                href="/"
+                className={`flex items-center px-3 py-2 rounded-md ${
+                  pathname === "/"
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <Globe className="h-5 w-5 mr-2" />
+                Web cliente
+              </Link>
             </nav>
           </div>
           <div className="p-4 border-t">
@@ -186,6 +198,17 @@ export default function AdminSidebar() {
             >
               <Settings className="h-5 w-5 mr-2" />
               Configuración
+            </Link>
+            <Link
+              href="/"
+              className={`flex items-center px-3 py-2 rounded-md ${
+                pathname === "/"
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <Globe className="h-5 w-5 mr-2" />
+              Web cliente
             </Link>
           </nav>
         </div>

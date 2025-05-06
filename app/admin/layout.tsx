@@ -25,7 +25,7 @@ export default function AdminLayout({
     <div className="min-h-screen bg-gray-50">
       {/* <AdminHeader /> */}
       {user && <AdminSidebar />}
-      <button
+     {/*  <button
         type="button"
         className="fixed top-30 right-2 lg:hidden mr-4 text-gray-500 bg-white p-1 rounded-md"
         onClick={() => {
@@ -37,7 +37,7 @@ export default function AdminLayout({
         }}
       >
         <Menu className="h-6 w-6" />
-      </button>
+      </button> */}
       <div className={`${user && 'lg:pl-64'}`}>
         <div className="flex flex-col min-h-screen">{children}</div>
       </div>

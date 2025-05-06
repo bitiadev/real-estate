@@ -16,8 +16,8 @@ import { useToast } from "@/hooks/use-toast"
 import { getLeadById, updateLead } from "@/lib/lead-service"
 import AdminHeader from "@/components/admin-header"
 
-export default function EditarLead({ params }: { params: { id: string } }) {
-  const leadId = Number.parseInt(params.id)
+export default function EditarLead({ params }: { params: Promise<{ id: string }> }) {
+  const [leadId, setLeadId] = useState<number | null>(null);
   const router = useRouter()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -34,6 +34,9 @@ export default function EditarLead({ params }: { params: { id: string } }) {
   // Cargar datos del lead
   useEffect(() => {
     const loadLead = async () => {
+      const leadIdParam = await params;
+      const leadId = Number(leadIdParam.id)
+      setLeadId(leadId)
       setIsLoadingLead(true)
       try {
         const lead = await getLeadById(leadId)
@@ -95,7 +98,7 @@ export default function EditarLead({ params }: { params: { id: string } }) {
         status: formData.status,
       }
 
-      const success = await updateLead(leadId, leadData)
+      const success = leadId && await updateLead(leadId, leadData)
 
       if (!success) {
         throw new Error("No se pudo actualizar el lead")
@@ -124,7 +127,7 @@ export default function EditarLead({ params }: { params: { id: string } }) {
     return (
       <>
         <AdminHeader showSearch={false} />
-        <div className="container max-w-2xl py-8 flex flex-col items-center justify-center">
+        <div className="max-w-2xl py-8 flex flex-col items-center justify-center mx-auto">
           <Loader2 className="h-8 w-8 animate-spin text-gray-400 mb-4" />
           <p className="text-gray-500">Cargando lead...</p>
         </div>
@@ -135,15 +138,16 @@ export default function EditarLead({ params }: { params: { id: string } }) {
   return (
     <>
       <AdminHeader showSearch={false} />
-      <div className="container max-w-2xl py-8">
-        <Link href="/admin/leads" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+      <div className="max-w-2xl py-8 mx-auto px-4 md:px-6">
+        <h1 className="text-2xl font-bold mb-4">Editar Lead</h1>
+        <Link href="/admin/leads" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6 w-full justify-end">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver a leads
         </Link>
 
         <Card>
           <CardHeader>
-            <CardTitle>Editar Lead</CardTitle>
+            <CardTitle>Formulario edición Lead</CardTitle>
             <CardDescription>Actualiza la información del cliente potencial</CardDescription>
           </CardHeader>
           <CardContent>

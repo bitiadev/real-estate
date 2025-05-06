@@ -236,8 +236,8 @@ export default function AdminDashboard() {
       {/* Contenido */}
       <main className="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 md:p-8">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <div className="mt-4 sm:mt-0">
+          <h1 className="text-2xl font-bold text-gray-900 text-center">Dashboard</h1>
+          <div className="mt-4 sm:mt-0 text-end">
             <Link href="/admin/propiedades/nueva">
               <Button>
                 <Plus className="mr-2 h-4 w-4" />

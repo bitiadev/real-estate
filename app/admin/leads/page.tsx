@@ -294,10 +294,10 @@ export default function LeadsAdminPage() {
     <div className="px-4 md:px-8 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold mb-1">Gestión de Leads</h1>
-          <p className="text-gray-500">Administra los clientes potenciales interesados en propiedades</p>
+          <h1 className="text-3xl font-bold mb-1 text-center">Gestión de Leads</h1>
+          <p className="text-gray-500 text-center">Administra los clientes potenciales interesados en propiedades</p>
         </div>
-        <div className="mt-4 sm:mt-0">
+        <div className="mt-4 sm:mt-0 text-end">
           <Button asChild>
             <Link href="/admin/leads/nuevo">
               <UserPlus className="mr-2 h-4 w-4" />

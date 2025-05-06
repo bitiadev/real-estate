@@ -276,7 +276,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
 
   if (isLoadingProperty) {
     return (
-      <div className="container max-w-4xl py-8 flex flex-col items-center justify-center">
+      <div className="max-w-4xl py-8 flex flex-col items-center justify-center mx-auto px-4 md:px-6">
         <Loader2 className="h-8 w-8 animate-spin text-gray-400 mb-4" />
         <p className="text-gray-500">Cargando propiedad...</p>
       </div>
@@ -284,15 +284,16 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="container max-w-4xl py-8">
-      <Link href="/admin/dashboard" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+    <div className="max-w-4xl py-8 mx-auto px-4 md:px-6">
+      <h1 className="text-2xl font-bold mb-4 text-center">Editar Propiedad</h1>
+      <Link href="/admin/dashboard" className="w-full justify-end inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Volver al dashboard
       </Link>
 
       <Card>
         <CardHeader>
-          <CardTitle>Editar Propiedad</CardTitle>
+          <CardTitle>Formulario de edición</CardTitle>
           <CardDescription>Actualiza la información de la propiedad</CardDescription>
         </CardHeader>
         <CardContent>

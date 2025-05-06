@@ -5,6 +5,7 @@ import PropertyCard from "@/components/property-card"
 import { Building, Home, Search } from "lucide-react"
 import { getAllProperties } from "@/lib/property-service"
 import Hero from '@/components/Hero'
+import Navbar from "@/components/navbar"
 
 // Hacer que la página sea dinámica para que se actualice con los datos más recientes
 export const dynamic = "force-dynamic"
@@ -46,7 +47,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-  
+      <Navbar />
       <Hero 
         type="carousel" 
         images={heroImages}
