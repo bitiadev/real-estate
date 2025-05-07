@@ -35,7 +35,7 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
   const mainImage = property.images?.find((img) => img.main_image) || property.images?.[0]
 
   // Función para manejar el clic en el botón de favoritos
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+ /*  const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault() // Evitar la navegación
     e.stopPropagation() // Evitar la propagación del evento
 
@@ -47,7 +47,7 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
         ? "Esta propiedad ha sido eliminada de tus favoritos."
         : "Esta propiedad ha sido añadida a tus favoritos.",
     })
-  }
+  } */
 
   // Extraer características destacadas
   const hasPool = property.features?.pool
@@ -75,7 +75,7 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
           </Badge>
 
           {/* Botón de favoritos */}
-          {showFavoriteButton && (
+          {/* {showFavoriteButton && (
             <Button
               variant="ghost"
               size="icon"
@@ -86,7 +86,7 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
             >
               <Heart className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`} />
             </Button>
-          )}
+          )} */}
         </div>
         <CardContent className="p-4 flex-grow">
           <div className="flex justify-between items-start">
