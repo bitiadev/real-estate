@@ -148,7 +148,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     )
   }
 
-  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+ /*  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setContactForm((prev) => ({ ...prev, [name]: value }))
   }
@@ -171,7 +171,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       })
       setIsSending(false)
     }, 1000)
-  }
+  } */
 
   const nextImage = () => {
     if (!property?.images) return
