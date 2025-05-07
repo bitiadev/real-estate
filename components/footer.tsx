@@ -10,7 +10,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Building className="h-6 w-6" />
-              <span className="text-xl font-bold text-white">Inmobiliaria</span>
+              <span className="text-xl font-bold text-white">Yitani Propiedades</span>
             </div>
             <p className="text-sm mb-4">
               Ofrecemos las mejores propiedades en venta y alquiler con un servicio personalizado y profesional.
@@ -40,16 +40,16 @@ export default function Footer() {
                   Propiedades
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="#" className="hover:text-white">
                   Servicios
                 </Link>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <Link href="#" className="hover:text-white">
                   Nosotros
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="#" className="hover:text-white">
                   Contacto
@@ -63,29 +63,14 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="#" className="hover:text-white">
-                  Casas en venta
+                 En venta
                 </Link>
               </li>
               <li>
                 <Link href="#" className="hover:text-white">
-                  Apartamentos en venta
+                  En alquiler
                 </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white">
-                  Casas en alquiler
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white">
-                  Apartamentos en alquiler
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white">
-                  Oficinas comerciales
-                </Link>
-              </li>
+              </li>              
             </ul>
           </div>
 
@@ -106,8 +91,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <a href={`mailto:${siteConfig.email}`} className="flex items-center">
-                  <Mail className="h-5 w-5 mr-2" />
-                  <span>{siteConfig.email}</span>
+                  <Mail className="h-5 w-5 mr-2 " />
+                  <span>Envianos tu mail, click aqui</span>
                 </a>
               </li>
             </ul>

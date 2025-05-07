@@ -276,7 +276,7 @@ export default function LeadsAdminPage() {
       case "venta":
         return (
           <Badge variant="outline" className="bg-gray-50">
-            Venta
+            Compra
           </Badge>
         )
       case "alquiler":
@@ -333,7 +333,7 @@ export default function LeadsAdminPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos los tipos</SelectItem>
-                  <SelectItem value="venta">Venta</SelectItem>
+                  <SelectItem value="venta">Compra</SelectItem>
                   <SelectItem value="alquiler">Alquiler</SelectItem>
                 </SelectContent>
               </Select>

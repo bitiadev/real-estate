@@ -241,7 +241,7 @@ export default function NuevaPropiedad() {
   }
 
   return (
-    <div className="m-auto px-4 md:px-8 max-w-4xl py-8">
+    <div className="m-auto md:px-8 max-w-4xl py-8">
       <h1 className="text-2xl font-bold mb-4 text-center">Crear Nueva Propiedad</h1>
       <Link href="/admin/dashboard" className="px-4 w-full justify-end inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />

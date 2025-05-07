@@ -58,8 +58,8 @@ export default async function HomePage() {
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Propiedades Destacadas</h2>
-              <p className="max-w-[600px] text-gray-500 md:text-xl">Descubre nuestras propiedades más exclusivas</p>
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Algunas de nuestras propiedades</h2>
+              {/* <p className="max-w-[600px] text-gray-500 md:text-xl">Descubre nuestras propiedades más exclusivas</p> */}
             </div>
           </div>
 

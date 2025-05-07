@@ -35,7 +35,7 @@ export default function AdminSidebar() {
           <div className="flex items-center justify-between h-16 px-6 border-b">
             <div className="flex items-center">
               <Building className="h-6 w-6 text-gray-700" />
-              <span className="ml-2 font-semibold">Inmobiliaria Admin</span>
+              <span className="ml-2 font-semibold">Administrador</span>
             </div>
             <button onClick={() => setSidebarOpen(false)}>
               <X className="h-6 w-6 text-gray-500" />
@@ -91,7 +91,7 @@ export default function AdminSidebar() {
                 <UserPlus className="h-5 w-5 mr-2" />
                 Leads
               </Link>
-              <Link
+              {/* <Link
                 href="/admin/configuracion"
                 className={`flex items-center px-3 py-2 rounded-md ${
                   isActive("/admin/configuracion")
@@ -102,7 +102,7 @@ export default function AdminSidebar() {
               >
                 <Settings className="h-5 w-5 mr-2" />
                 Configuración
-              </Link>
+              </Link> */}
               <Link
                 href="/"
                 className={`flex items-center px-3 py-2 rounded-md ${
@@ -188,7 +188,7 @@ export default function AdminSidebar() {
               <UserPlus className="h-5 w-5 mr-2" />
               Leads
             </Link>
-            <Link
+            {/* <Link
               href="/admin/configuracion"
               className={`flex items-center px-3 py-2 rounded-md ${
                 isActive("/admin/configuracion")
@@ -198,7 +198,7 @@ export default function AdminSidebar() {
             >
               <Settings className="h-5 w-5 mr-2" />
               Configuración
-            </Link>
+            </Link> */}
             <Link
               href="/"
               className={`flex items-center px-3 py-2 rounded-md ${

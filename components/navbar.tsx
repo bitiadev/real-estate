@@ -65,7 +65,7 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   {/* <Building className="h-6 w-6" /> */}
                   <Image
-                    src="/Logo.svg"
+                    src="/logo.svg"
                     alt="Logo"
                     width={70}
                     height={70}
@@ -96,7 +96,7 @@ export default function Navbar() {
               </nav>
               <div className="mt-auto border-t py-6">
                 <Link href="/admin/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full">Acceso</Button>
+                  <Button className="w-full bg-slate-100 text-slate-600">Acceso</Button>
                 </Link>
               </div>
             </div>

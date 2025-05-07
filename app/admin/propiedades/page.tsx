@@ -87,12 +87,12 @@ export default function PropertiesAdminPage() {
 
   const filterProperties = () => {
     let filtered = [...properties]
-
+  
     // Filtrar por tipo (pestaña)
     if (currentTab !== "todas") {
       filtered = filtered.filter((property) => property.type === currentTab)
     }
-
+  
     // Filtrar por término de búsqueda
     if (searchTerm) {
       const term = searchTerm.toLowerCase()
@@ -103,34 +103,34 @@ export default function PropertiesAdminPage() {
           property.id.toString().includes(term),
       )
     }
-
+  
     // Filtrar por ubicación
-    if (filterOptions.location) {
+    if (filterOptions.location && filterOptions.location !== "all_locations") {
       filtered = filtered.filter((property) =>
         property.location.toLowerCase().includes(filterOptions.location.toLowerCase()),
       )
     }
-
+  
     // Filtrar por precio mínimo
     if (filterOptions.minPrice) {
       const minPrice = Number.parseFloat(filterOptions.minPrice)
       filtered = filtered.filter((property) => property.price >= minPrice)
     }
-
+  
     // Filtrar por precio máximo
     if (filterOptions.maxPrice) {
       const maxPrice = Number.parseFloat(filterOptions.maxPrice)
       filtered = filtered.filter((property) => property.price <= maxPrice)
     }
-
+  
     // Filtrar por estado
     if (filterOptions.status !== "all") {
       filtered = filtered.filter((property) => property.status === filterOptions.status)
     }
-
+  
     // Ordenar propiedades
     filtered = sortProperties(filtered, sortBy)
-
+  
     setFilteredProperties(filtered)
   }
 
@@ -341,7 +341,7 @@ export default function PropertiesAdminPage() {
             </div>
 
             <div>
-              <Select value={filterOptions.location} onValueChange={(value) => handleFilterChange("location", value)}>
+              <Select /* defaultValue="TresArroyos" */ value={filterOptions.location} onValueChange={(value) => handleFilterChange("location", value)}>
                 <SelectTrigger>
                   <div className="flex items-center">
                     <MapPin className="h-4 w-4 mr-2 text-gray-500" />
@@ -350,10 +350,8 @@ export default function PropertiesAdminPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all_locations">Todas las ubicaciones</SelectItem>
-                  <SelectItem value="Buenos Aires">Buenos Aires</SelectItem>
-                  <SelectItem value="Córdoba">Córdoba</SelectItem>
-                  <SelectItem value="Rosario">Rosario</SelectItem>
-                  <SelectItem value="Mendoza">Mendoza</SelectItem>
+                  <SelectItem value="Tres Arroyos">Tres Arroyos</SelectItem>
+                  <SelectItem value="Claromeco">Claromeco</SelectItem>                  
                 </SelectContent>
               </Select>
             </div>
