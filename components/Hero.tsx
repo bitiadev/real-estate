@@ -88,12 +88,13 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
             </div>
 
             {/* Barra de búsqueda */}
+            
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
-                  <Select defaultValue="TresArroyos">
+                  <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Ubicacion" />
+                      <SelectValue placeholder="Ubicacion"/>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="TresArroyos">Tres Arroyos</SelectItem>
@@ -103,7 +104,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
                   </Select>
                 </div>
                 <div>
-                  <Select defaultValue="all">
+                  <Select>
                     <SelectTrigger>
                       <SelectValue placeholder="Tipo" />
                     </SelectTrigger>
