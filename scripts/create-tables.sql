@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS properties (
   area NUMERIC NOT NULL,
   features JSONB,
   status TEXT NOT NULL DEFAULT 'activa' CHECK (status IN ('activa', 'vendida', 'alquilada')),
+  featured BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
