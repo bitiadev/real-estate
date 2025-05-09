@@ -37,7 +37,7 @@ export default function AdminSidebar() {
               <Building className="h-6 w-6 text-gray-700" />
               <span className="ml-2 font-semibold">Administrador</span>
             </div>
-            <button onClick={() => setSidebarOpen(false)}>
+            <button title="Open Sidebar" onClick={() => setSidebarOpen(false)}>
               <X className="h-6 w-6 text-gray-500" />
             </button>
           </div>
@@ -130,6 +130,7 @@ export default function AdminSidebar() {
       <button
         id="mobile-sidebar-toggle"
         type="button"
+        title="button open sidebar mobile"
         className="lg:hidden fixed z-40 top-4 left-4 p-2 rounded-md text-gray-500 hover:text-gray-900 focus:outline-none bg-white shadow-md"
         onClick={() => setSidebarOpen(true)}
       >

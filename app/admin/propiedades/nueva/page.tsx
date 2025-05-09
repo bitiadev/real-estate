@@ -455,7 +455,7 @@ export default function NuevaPropiedad() {
                 <Label>Imágenes</Label>
                 {/* Input para seleccionar archivos */}
                 <div>
-                    <input type="file" multiple onChange={handleFileSelect} accept="image/*" />
+                    <input type="file" title="imagenes" multiple onChange={handleFileSelect} accept="image/*" />
                 </div>
                 {/* Previsualización de imágenes subidas y selección de principal */}
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

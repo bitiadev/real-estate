@@ -133,6 +133,7 @@ export default function ImageUpload({
           multiple
           className="hidden"
           disabled={isUploading || images.length >= maxImages}
+          title="Seleccionar imágenes para subir"
         />
 
         <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />

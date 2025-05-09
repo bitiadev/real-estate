@@ -25,7 +25,7 @@ export default function AdminLayout({
     <div className="min-h-screen bg-gray-50">
       {/* <AdminHeader /> */}
       {user && <AdminSidebar />}
-     {/*  <button
+      {/*  <button
         type="button"
         className="fixed top-30 right-2 lg:hidden mr-4 text-gray-500 bg-white p-1 rounded-md"
         onClick={() => {

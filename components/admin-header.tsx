@@ -28,6 +28,7 @@ export default function AdminHeader({ searchTerm = "", onSearchChange, showSearc
       <button
         type="button"
         className="lg:hidden mr-4 text-gray-500"
+        title="Toggle sidebar"
         onClick={() => {
           // Buscar el elemento con el ID "mobile-sidebar-toggle" y hacer clic en él
           const toggleButton = document.getElementById("mobile-sidebar-toggle")

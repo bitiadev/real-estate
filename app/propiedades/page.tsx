@@ -420,7 +420,7 @@ export default function PropertiesPage() {
                         <SelectValue placeholder="Dormitorios" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="any">Cualquiera</SelectItem>
+                        <SelectItem value="any">Cantidad</SelectItem>
                         <SelectItem value="1">1</SelectItem>
                         <SelectItem value="2">2</SelectItem>
                         <SelectItem value="3">3</SelectItem>
@@ -436,7 +436,7 @@ export default function PropertiesPage() {
                         <SelectValue placeholder="Baños" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="any">Cualquiera</SelectItem>
+                        <SelectItem value="any">Cantidad</SelectItem>
                         <SelectItem value="1">1</SelectItem>
                         <SelectItem value="2">2</SelectItem>
                         <SelectItem value="3+">3+</SelectItem>
@@ -738,7 +738,7 @@ export default function PropertiesPage() {
                           <SelectValue placeholder="Dormitorios" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="any">Cualquiera</SelectItem>
+                          <SelectItem value="any">Cantidad</SelectItem>
                           <SelectItem value="1">1</SelectItem>
                           <SelectItem value="2">2</SelectItem>
                           <SelectItem value="3">3</SelectItem>
@@ -760,7 +760,7 @@ export default function PropertiesPage() {
                           <SelectValue placeholder="Baños" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="any">Cualquiera</SelectItem>
+                          <SelectItem value="any">Cantidad</SelectItem>
                           <SelectItem value="1">1</SelectItem>
                           <SelectItem value="2">2</SelectItem>
                           <SelectItem value="3+">3+</SelectItem>
