@@ -317,7 +317,7 @@ export default function PropertiesPage() {
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <Input
-            placeholder="Buscar por ubicación..."
+            placeholder="Buscar..."
             className="pl-10"
             value={filters.location}
             onChange={(e) => handleFilterChange("location", e.target.value)}

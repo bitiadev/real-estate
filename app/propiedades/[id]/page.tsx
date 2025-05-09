@@ -412,7 +412,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
             <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
             <p className="text-2xl font-bold text-gray-900 mb-6">{formatPrice(property.price, property.type)}</p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
                 <Bed className="h-6 w-6 text-gray-500 mb-1" />
                 <span className="text-sm text-gray-500">Dormitorios</span>
@@ -428,11 +428,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                 <span className="text-sm text-gray-500">Superficie</span>
                 <span className="font-semibold">{property.area} m²</span>
               </div>
-              <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
+              {/* <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
                 <Calendar className="h-6 w-6 text-gray-500 mb-1" />
                 <span className="text-sm text-gray-500">Año</span>
                 <span className="font-semibold">{new Date(property.created_at).getFullYear()}</span>
-              </div>
+              </div> */}
             </div>
 
             {/* Resumen de características */}
@@ -461,10 +461,10 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
           {/* Tabs de información */}
           <Tabs defaultValue="description" className="mb-8">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="description">Descripción</TabsTrigger>
               <TabsTrigger value="features">Características</TabsTrigger>
-              <TabsTrigger value="location">Ubicación</TabsTrigger>
+              {/* <TabsTrigger value="location">Ubicación</TabsTrigger> */}
             </TabsList>
             <TabsContent value="description" className="p-4 bg-white rounded-b-lg border border-t-0">
               <p className="text-gray-700 leading-relaxed whitespace-pre-line">{property.description}</p>
