@@ -20,9 +20,13 @@ export default async function HomePage() {
   const activeProperties = allProperties.filter((p) => p.status === "activa")
 
   // Seleccionar propiedades destacadas (las 3 más recientes)
-  const featuredProperties = activeProperties
+  /* const featuredProperties = activeProperties
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    .slice(0, 3)
+    .slice(0, 3) */
+
+     // Filtrar propiedades destacadas (simulando el atributo `featured`)
+  const featuredProperties = activeProperties.filter((p) => p.featured ?? false)
+
 
    // Configuración de imágenes para el carrusel del Hero
   // Estas imágenes se mostrarán según el tipo de dispositivo (desktop, tablet, mobile)
@@ -58,8 +62,8 @@ export default async function HomePage() {
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Algunas de nuestras propiedades</h2>
-              {/* <p className="max-w-[600px] text-gray-500 md:text-xl">Descubre nuestras propiedades más exclusivas</p> */}
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Propiedades destacadas</h2>
+              <p className="max-w-[600px] text-gray-500 md:text-xl">Descubre nuestras propiedades más exclusivas</p>
             </div>
           </div>
 

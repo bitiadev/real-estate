@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -31,7 +30,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Building, Search, Plus, Edit, Trash2, Eye, Filter, ArrowUpDown, Loader2, Home, MapPin } from "lucide-react"
-import { getAllProperties, updatePropertyStatus, deleteProperty } from "@/lib/property-service"
+import { getAllProperties, updatePropertyStatus, deleteProperty, updateProperty } from "@/lib/property-service"
 import type { Property } from "@/lib/property-service"
 import { useToast } from "@/hooks/use-toast"
 
@@ -307,6 +306,31 @@ export default function PropertiesAdminPage() {
     }
   }
 
+  const toggleFeatured = async (propertyId: number, isFeatured: boolean) => {
+    try {
+      const success = await updateProperty(propertyId, { featured: !isFeatured })
+      if (success) {
+        toast({
+          title: "Propiedad actualizada",
+          description: `La propiedad ha sido ${!isFeatured ? "marcada como destacada" : "desmarcada como destacada"}.`,
+        })
+        // Actualizar la lista de propiedades
+        setProperties((prev) =>
+          prev.map((p) => (p.id === propertyId ? { ...p, featured: !isFeatured } : p)),
+        )
+      } else {
+        throw new Error("No se pudo actualizar la propiedad")
+      }
+    } catch (error) {
+      console.error("Error al actualizar la propiedad:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la propiedad. Inténtalo de nuevo.",
+        variant: "destructive",
+      })
+    }
+  }
+
   return (
     <div className="px-4 md:px-8 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
@@ -488,6 +512,13 @@ export default function PropertiesAdminPage() {
                         return (
                           <TableRow key={property.id}>
                             <TableCell className="font-medium">{property.id}</TableCell>
+                            <TableCell>
+                              <Button variant={property.featured ? "secondary" : "outline"}
+                                      onClick={() => toggleFeatured(property.id, property.featured)}
+                              >
+                                {property.featured ? "Destacada" : "Marcar como destacada"}
+                              </Button>
+                            </TableCell>
                             <TableCell>
                               <div className="relative h-10 w-14 rounded overflow-hidden">
                                 <Image

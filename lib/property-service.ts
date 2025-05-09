@@ -3,6 +3,7 @@ import { getPropertyImages } from "./storage-service"
 
 export type Property = {
   id: number
+  featured: boolean
   title: string
   description: string
   price: number
@@ -115,6 +116,25 @@ export async function deleteProperty(id: number): Promise<boolean> {
     return true
   } catch (error) {
     console.error(`Error al eliminar la propiedad con ID ${id}:`, error)
+    return false
+  }
+}
+
+/**
+ * Actualiza los campos de una propiedad. En este caso se implemento por destacado o no (featured) 
+ */
+
+export async function updateProperty(id: number, updates: Partial<Property>): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("properties").update(updates).eq("id", id)
+
+    if (error) {
+      throw error
+    }
+
+    return true
+  } catch (error) {
+    console.error(`Error al actualizar la propiedad con ID ${id}:`, error)
     return false
   }
 }
