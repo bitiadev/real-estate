@@ -52,6 +52,7 @@ export default function NuevaPropiedad() {
       airConditioning: false,
       heating: false,
     },
+    visible: true
   })
   const [images, setImages] = useState<UploadedImage[]>([]) // Usaremos este estado para las imágenes subidas
 
@@ -71,6 +72,13 @@ export default function NuevaPropiedad() {
         ...prev.features,
         [name]: checked,
       },
+    }))
+  }
+
+  const handleCheckboxChangeVisible = (checked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      visible: checked,
     }))
   }
 
@@ -159,6 +167,7 @@ export default function NuevaPropiedad() {
         bathrooms: Number.parseInt(formData.bathrooms),
         area: Number.parseFloat(formData.area),
         features: formData.features,
+        visible: formData.visible,
         status: "activa", // O "borrador" si prefieres un paso de publicación
       };
 
@@ -448,6 +457,24 @@ export default function NuevaPropiedad() {
                       Calefacción
                     </label>
                   </div>
+                </div>
+              </div>
+
+              {/* Sección para indicar si va a estar visible o no */}
+              <div className="grid gap-3">
+                <Label>Estado de publicación</Label>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="visible"
+                    checked={formData.visible}
+                    onCheckedChange={(checked) => handleCheckboxChangeVisible(checked as boolean)}
+                  />
+                  <label
+                    htmlFor="visible"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Visible en el sitio web
+                  </label>
                 </div>
               </div>
 

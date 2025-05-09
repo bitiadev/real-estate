@@ -61,7 +61,8 @@ export default function PropertiesPage() {
       try {
         const data = await getAllProperties()
         // Filtrar solo propiedades activas
-        const activeProperties = data.filter((p) => p.status === "activa")
+        const activeProperties = data.filter((p) => p.status === "activa" && p.visible)
+        console.log("Propiedades activas:", activeProperties)
         setProperties(activeProperties)
         setFilteredProperties(activeProperties)
 

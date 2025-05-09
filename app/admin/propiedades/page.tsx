@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Building, Search, Plus, Edit, Trash2, Eye, Filter, ArrowUpDown, Loader2, Home, MapPin } from "lucide-react"
+import { Building, Search, Plus, Edit, Trash2, Eye, Filter, ArrowUpDown, Loader2, Home, MapPin, Flame, EyeClosed } from "lucide-react"
 import { getAllProperties, updatePropertyStatus, deleteProperty, updateProperty } from "@/lib/property-service"
 import type { Property } from "@/lib/property-service"
 import { useToast } from "@/hooks/use-toast"
@@ -331,6 +331,31 @@ export default function PropertiesAdminPage() {
     }
   }
 
+  const toggleVisible = async (propertyId: number, isVisible: boolean) => {
+    try {
+      const success = await updateProperty(propertyId, { visible: !isVisible })
+      if (success) {
+        toast({
+          title: "Propiedad actualizada",
+          description: `La propiedad ha sido ${!isVisible ? "marcada como visible" : "desmarcada como visible"}.`,
+        })
+        // Actualizar la lista de propiedades
+        setProperties((prev) =>
+          prev.map((p) => (p.id === propertyId ? { ...p, visible: !isVisible } : p)),
+        )
+      } else {
+        throw new Error("No se pudo actualizar la propiedad")
+      }
+    } catch (error) {
+      console.error("Error al actualizar la propiedad:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la propiedad. Inténtalo de nuevo.",
+        variant: "destructive",
+      })
+    }
+  }
+
   return (
     <div className="px-4 md:px-8 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
@@ -501,6 +526,8 @@ export default function PropertiesAdminPage() {
                         <TableHead>Tipo</TableHead>
                         <TableHead>Estado</TableHead>
                         <TableHead>Fecha</TableHead>
+                        <TableHead>Destacada</TableHead>
+                        <TableHead>Visible</TableHead>
                         <TableHead className="text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -512,13 +539,7 @@ export default function PropertiesAdminPage() {
                         return (
                           <TableRow key={property.id}>
                             <TableCell className="font-medium">{property.id}</TableCell>
-                            <TableCell>
-                              <Button variant={property.featured ? "secondary" : "outline"}
-                                      onClick={() => toggleFeatured(property.id, property.featured)}
-                              >
-                                {property.featured ? "Destacada" : "Marcar como destacada"}
-                              </Button>
-                            </TableCell>
+                            
                             <TableCell>
                               <div className="relative h-10 w-14 rounded overflow-hidden">
                                 <Image
@@ -544,6 +565,28 @@ export default function PropertiesAdminPage() {
                             </TableCell>
                             <TableCell>{getStatusBadge(property.status)}</TableCell>
                             <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                              <Button 
+                                variant={property.featured ? "secondary" : "outline"}
+                                onClick={() => toggleFeatured(property.id, property.featured)}
+                                size="icon"
+                                className="w-12 h-12"
+                                
+                              >
+                                <Flame className="scale-150" fill={property.featured ? "yellow" : "white" } color={property.featured ? "red" : "black"}/>
+                                {/* {property.featured ? "Destacada" : "Marcar como destacada"} */}
+                              </Button>
+                            </TableCell>
+                            <TableCell>
+                              <Button variant={property.visible ? "secondary" : "outline"}
+                                      onClick={() => toggleVisible(property.id, property.visible)}
+                              >
+                                {property.visible ? 
+                                  <Eye className="scale-150 fill-white" /> :
+                                  <EyeClosed className="scale-150"/>
+                                }
+                              </Button>
+                            </TableCell>
                             <TableCell className="text-right">
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
