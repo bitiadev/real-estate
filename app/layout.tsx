@@ -31,7 +31,7 @@ export default function RootLayout({
             <AuthGuard>
               <div className="flex flex-col min-h-screen">
                 <main className="flex-1">{children}</main>
-                <Footer />
+                
                 <StickyWhatsAppButton />
               </div>
             </AuthGuard>

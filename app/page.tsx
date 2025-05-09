@@ -6,6 +6,7 @@ import { Building, Home, Search } from "lucide-react"
 import { getAllProperties } from "@/lib/property-service"
 import Hero from '@/components/Hero'
 import Navbar from "@/components/navbar"
+import Footer from "@/components/footer"
 
 // Hacer que la página sea dinámica para que se actualice con los datos más recientes
 export const dynamic = "force-dynamic"
@@ -125,6 +126,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   )
 }

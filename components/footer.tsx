@@ -4,7 +4,7 @@ import siteConfig from "@/config/siteConfig.json"
 
 export default function Footer() {
   return (
-    <footer id="footer" className="bg-azul text-gray-300">
+    <footer id="footer" className="bg-azul text-gray-300 z-20">
       <div className="container px-4 py-12 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
@@ -62,12 +62,12 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-white mb-4">Propiedades</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="hover:text-white">
-                  En venta
+                <Link href="/propiedades?type=venta" className="hover:text-white">
+                 En venta
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/propiedades?type=alquiler" className="hover:text-white">
                   En alquiler
                 </Link>
               </li>              
