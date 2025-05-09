@@ -14,6 +14,7 @@ export type Property = {
   area: number
   features: Record<string, boolean>
   status: string
+  visible: boolean
   created_at: string
   updated_at: string
   images?: Array<{
