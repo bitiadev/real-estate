@@ -46,7 +46,7 @@ export default function Navbar() {
               Contacto
             </Link>
             <Link
-              href="https://wa.me/542983526754?text=Hola%20!%2C%20necesito%20tasar%20una%20propiedad%20!"
+              href="https://wa.me/542983526754?text=Hola%20!%20necesito%20tasar%20una%20propiedad"
               className="text-sm font-medium p-2 bg-naranja text-white rounded-md hover:bg-naranja/80"
               target="_blank"
               rel="noopener noreferrer"
@@ -87,7 +87,7 @@ export default function Navbar() {
                   <span className="sr-only">Close menu</span>
                 </Button> */}
               </div>
-              <nav className="flex flex-col items-center gap-10 py-8">
+              <nav className="flex flex-col items-center gap-12 py-8 text-naranja">
                 <Link href="/" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
                   Inicio
                 </Link>
@@ -102,6 +102,14 @@ export default function Navbar() {
                 </Link> */}
                 <Link href="#footer" className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
                   Contacto
+                </Link>
+                <Link
+                  href="https://wa.me/542983526754?text=Hola%20!%20necesito%20tasar%20una%20propiedad"
+                  className="text-lg font-medium p-2 border-naranja border rounded-md bg-blanco"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Pedi tu tasación
                 </Link>
               </nav>
               {/* <div className="mt-auto border-t py-6">
