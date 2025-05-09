@@ -347,10 +347,10 @@ export default function PropertiesPage() {
 
               <div className="py-4 space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium">Tipo de propiedad</h3>
+                  <h3 className="text-sm font-medium">Tipo de operacion</h3>
                   <Select value={filters.type} onValueChange={(value) => handleFilterChange("type", value)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Tipo de propiedad" />
+                      <SelectValue placeholder="Tipo de operacion" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos</SelectItem>
@@ -642,7 +642,7 @@ export default function PropertiesPage() {
 
             <Accordion type="multiple" defaultValue={["type", "price", "rooms", "features"]} className="space-y-2">
               <AccordionItem value="type" className="border-b">
-                <AccordionTrigger className="py-2 text-sm font-medium">Tipo de propiedad</AccordionTrigger>
+                <AccordionTrigger className="py-2 text-sm font-medium">Tipo de Operacion</AccordionTrigger>
                 <AccordionContent>
                   <Select
                     value={filters.type}
@@ -652,7 +652,7 @@ export default function PropertiesPage() {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Tipo de propiedad" />
+                      <SelectValue placeholder="Tipo de operacion" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos</SelectItem>

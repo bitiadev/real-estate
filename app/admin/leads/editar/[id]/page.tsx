@@ -179,7 +179,7 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="grid gap-3">
-                    <Label htmlFor="property_type">Tipo de propiedad</Label>
+                    <Label htmlFor="property_type">Tipo de operacion</Label>
                     <Select
                       value={formData.property_type}
                       onValueChange={(value) => handleSelectChange("property_type", value)}

@@ -329,7 +329,7 @@ export default function LeadsAdminPage() {
                 onValueChange={(value) => handleFilterChange("property_type", value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Tipo de propiedad" />
+                  <SelectValue placeholder="Tipo de operacion" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos los tipos</SelectItem>

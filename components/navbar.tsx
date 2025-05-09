@@ -29,21 +29,31 @@ export default function Navbar() {
         </div>
 
         <nav className="hidden md:flex gap-6 mr-[20%]">
-          <Link href="/" className="text-sm font-medium hover:underline">
-            Inicio
-          </Link>
-          <Link href="/propiedades" className="text-sm font-medium hover:underline">
-            Propiedades
-          </Link>
-          {/* <Link href="#" className="text-sm font-medium hover:underline">
-            Servicios
-          </Link>
-          <Link href="#" className="text-sm font-medium hover:underline">
-            Nosotros
-          </Link> */}
-          <Link href="#footer" className="text-sm font-medium hover:underline">
-            Contacto
-          </Link>
+          <div className="align-center flex items-center gap-6">
+            <Link href="/" className="text-sm font-medium hover:underline">
+              Inicio
+            </Link>
+            <Link href="/propiedades" className="text-sm font-medium hover:underline">
+              Propiedades
+            </Link>
+            {/* <Link href="#" className="text-sm font-medium hover:underline">
+              Servicios
+            </Link>
+            <Link href="#" className="text-sm font-medium hover:underline">
+              Nosotros
+            </Link> */}
+            <Link href="#footer" className="text-sm font-medium hover:underline">
+              Contacto
+            </Link>
+            <Link
+              href="https://wa.me/542983526754?text=Hola%20!%2C%20necesito%20tasar%20una%20propiedad%20!"
+              className="text-sm font-medium p-2 bg-naranja text-white rounded-md hover:bg-naranja/80"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Pedi tu tasación
+            </Link>
+          </div>
         </nav>
 
      {/*    <div className="hidden md:flex gap-4">
@@ -94,11 +104,11 @@ export default function Navbar() {
                   Contacto
                 </Link>
               </nav>
-              <div className="mt-auto border-t py-6">
+              {/* <div className="mt-auto border-t py-6">
                 <Link href="/admin/login" onClick={() => setIsMenuOpen(false)}>
                   <Button className="w-full bg-slate-100 text-slate-600">Acceso</Button>
                 </Link>
-              </div>
+              </div> */}
             </div>
           </SheetContent>
         </Sheet>
