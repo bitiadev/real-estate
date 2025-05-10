@@ -22,6 +22,12 @@ export type Property = {
     url: string
     main_image: boolean
   }>
+  category: string;
+  contact_name: string;
+  contact_last_name: string;
+  contact_phone: string;
+  contact_location?: string;
+  currency: string;
 }
 
 /**

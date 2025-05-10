@@ -176,6 +176,12 @@ export default function NuevaPropiedad() {
         features: formData.features,
         visible: formData.visible,
         status: "activa", // O "borrador" si prefieres un paso de publicación
+        category: formData.category,
+        contact_name: formData.contact_name,
+        contact_last_name: formData.contact_last_name,
+        contact_phone: formData.contact_phone,
+        contact_location: formData.contact_location,
+        currency: formData.currency,
       };
 
       const { data: newProperty, error: propertyError } = await supabase
@@ -257,7 +263,7 @@ export default function NuevaPropiedad() {
   }
 
   return (
-    <div className="m-auto md:px-8 max-w-4xl py-8">
+    <div className="max-w-4xl py-8 mx-auto md:max-w-full md:mx-12 px-4 md:px-6">
       <h1 className="text-2xl font-bold mb-4 text-center">Crear Nueva Propiedad</h1>
       <Link href="/admin/dashboard" className="px-4 w-full justify-end inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -297,10 +303,9 @@ export default function NuevaPropiedad() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <div className="grid gap-3 grid-cols-2">
-                  <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-4">                
+                <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
+                  <div className="flex flex-col gap-3 md:col-span-1">
                     <Label htmlFor="currency">Moneda</Label>
                     {/* Select para moneda */}
                     <Select value={formData.currency} onValueChange={(value) => handleSelectChange("currency", value)}>
@@ -313,7 +318,7 @@ export default function NuevaPropiedad() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 md:col-span-2">
                     <Label htmlFor="price">Precio</Label>
                     <Input
                       id="price"
@@ -341,10 +346,10 @@ export default function NuevaPropiedad() {
                 </div>
 
                 <div className="grid gap-3">
-                  <Label htmlFor="category">Categoría</Label>
+                  <Label htmlFor="category">Tipo</Label>
                   <Select value={formData.category} onValueChange={(value) => handleSelectChange("category", value)} required>
                     <SelectTrigger id="category">
-                      <SelectValue placeholder="Selecciona la categoría" />
+                      <SelectValue placeholder="Selecciona el tipo" />
                     </SelectTrigger>
                     <SelectContent>
                      {
@@ -357,18 +362,17 @@ export default function NuevaPropiedad() {
                     </SelectContent>
                   </Select> 
                 </div>
-              </div>
-
-              <div className="grid gap-3">
-                <Label htmlFor="location">Ubicación</Label>
-                <Input
-                  id="location"
-                  name="location"
-                  placeholder="Ej: Palermo, Buenos Aires"
-                  required
-                  value={formData.location}
-                  onChange={handleInputChange}
-                />
+                <div className="grid gap-3">
+                  <Label htmlFor="location">Ubicación</Label>
+                  <Input
+                    id="location"
+                    name="location"
+                    placeholder="Ej: Tres Arroyos, Lavalle 155"
+                    required
+                    value={formData.location}
+                    onChange={handleInputChange}
+                  />
+                </div>              
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -411,7 +415,54 @@ export default function NuevaPropiedad() {
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="grid gap-3">
+                  <Label htmlFor="contact_name">Nombre de contacto</Label>
+                  <Input
+                    id="contact_name"
+                    name="contact_name"
+                    placeholder="Ej: Juan"
+                    required
+                    value={formData.contact_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3">                       
+                  <Label htmlFor="contact_last_name">Apellido de contacto</Label>
+                  <Input
+                    id="contact_last_name"
+                    name="contact_last_name"
+                    placeholder="Ej: Pérez"
+                    required
+                    value={formData.contact_last_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="contact_phone">Teléfono de contacto</Label>
+                  <Input
+                    id="contact_phone"
+                    name="contact_phone"
+                    placeholder="Ej: 1234567890"
+                    required
+                    value={formData.contact_phone}
+                    onChange={handleInputChange}
+                  />
 
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="contact_location">Ubicación de contacto</Label>
+                  <Input
+                    id="contact_location"
+                    name="contact_location"
+                    placeholder="Ej: Tres Arroyos, Lavalle 155"
+                    required
+                    value={formData.contact_location}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              {/* Sección para las características */}
               <div className="grid gap-3">
                 <Label>Características</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

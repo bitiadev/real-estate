@@ -22,6 +22,7 @@ import {
 } from "@/lib/storage-service"
 import { getPropertyById } from "@/lib/property-service"
 import { supabase } from "@/lib/supabaseClient"
+import categories from "@/data/categories.json"
 
 export default function EditarPropiedad({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -47,6 +48,12 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
       heating: false,
     },
     status: "activa",
+    category: "",
+    contact_name: "",
+    contact_last_name: "",
+    contact_phone: "",
+    contact_location: "",
+    currency: "ARS"
   })
   const [images, setImages] = useState<Array<{ id: number; url: string; main_image: boolean }>>([])
 
@@ -96,6 +103,12 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
             heating: false,
           },
           status: property.status,
+          category: property.category,
+          contact_name: property.contact_name,
+          contact_last_name: property.contact_last_name,
+          contact_phone: property.contact_phone,
+          contact_location: property.contact_location || "",
+          currency: property.currency,
         })
 
         // Cargar imágenes
@@ -243,11 +256,17 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
           title: formData.title,
           description: formData.description,
           price: Number.parseFloat(formData.price),
+          currency: formData.currency,
+          category: formData.category,
           type: formData.type,
           location: formData.location,
           bedrooms: Number.parseInt(formData.bedrooms),
           bathrooms: Number.parseInt(formData.bathrooms),
           area: Number.parseFloat(formData.area),
+          contact_name: formData.contact_name,
+          contact_last_name: formData.contact_last_name,
+          contact_phone: formData.contact_phone,
+          contact_location: formData.contact_location,
           features: formData.features,
           status: formData.status,
           updated_at: new Date().toISOString(),
@@ -284,7 +303,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="max-w-4xl py-8 mx-auto px-4 md:px-6">
+    <div className="max-w-4xl py-8 mx-auto md:max-w-full md:mx-12 px-4 md:px-6">
       <h1 className="text-2xl font-bold mb-4 text-center">Editar Propiedad</h1>
       <Link href="/admin/dashboard" className="w-full justify-end inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -316,86 +335,177 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                 <Textarea
                   id="description"
                   name="description"
+                  rows={8}
                   placeholder="Descripción de la propiedad"
                   required
                   value={formData.description}
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="price">Precio</Label>
-                <Input
-                  id="price"
-                  name="price"
-                  type="number"
-                  placeholder="Ej: 250000"
-                  required
-                  value={formData.price}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="type">Tipo</Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(value) => handleSelectChange("type", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un tipo" />
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-10">
+                <div className="grid gap-3 md:col-span-2">
+                  <Label htmlFor="price">Precio</Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    placeholder="Ej: 250000"
+                    required
+                    value={formData.price}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3 md:col-span-1">
+                  <Label htmlFor="currency">Moneda</Label>
+                  <Select
+                  value={formData.currency}
+                  onValueChange={(value) => handleSelectChange("currency", value)}
+                  >
+                  <SelectTrigger id="currency">
+                    <SelectValue placeholder="Selecciona la moneda" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="venta">Venta</SelectItem>
-                    <SelectItem value="alquiler">Alquiler</SelectItem>
+                    <SelectItem value="ARS">ARS</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
                   </SelectContent>
-                </Select>
+                  </Select>
+                </div>
+                <div className="grid gap-3 md:col-span-2">
+                  <Label htmlFor="type">Operacion</Label>
+                  <Select
+                    value={formData.type}
+                    onValueChange={(value) => handleSelectChange("type", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo de Operacion" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="venta">Venta</SelectItem>
+                      <SelectItem value="alquiler">Alquiler</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-3 md:col-span-2">
+                <Label htmlFor="category">Tipo</Label>
+                  <Select
+                    value={formData.category}
+                    onValueChange={(value) => handleSelectChange("category", value)}
+                  >
+                    <SelectTrigger id="category">
+                      <SelectValue placeholder="Selecciona una categoría" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-3 md:col-span-3">
+                  <Label htmlFor="location">Ubicación</Label>
+                  <Input
+                    id="location"
+                    name="location"
+                    placeholder="Ej: Ciudad, País"
+                    required
+                    value={formData.location}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="location">Ubicación</Label>
-                <Input
-                  id="location"
-                  name="location"
-                  placeholder="Ej: Ciudad, País"
-                  required
-                  value={formData.location}
-                  onChange={handleInputChange}
-                />
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="bedrooms">Habitaciones</Label>
+                  <Input
+                    id="bedrooms"
+                    name="bedrooms"
+                    type="number"
+                    placeholder="Ej: 3"
+                    required
+                    value={formData.bedrooms}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="bathrooms">Baños</Label>
+                  <Input
+                    id="bathrooms"
+                    name="bathrooms"
+                    type="number"
+                    placeholder="Ej: 2"
+                    required
+                    value={formData.bathrooms}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="area">Área (m²)</Label>
+                  <Input
+                    id="area"
+                    name="area"
+                    type="number"
+                    placeholder="Ej: 120"
+                    required
+                    value={formData.area}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="bedrooms">Habitaciones</Label>
-                <Input
-                  id="bedrooms"
-                  name="bedrooms"
-                  type="number"
-                  placeholder="Ej: 3"
-                  required
-                  value={formData.bedrooms}
-                  onChange={handleInputChange}
-                />
+              
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+                <div className="grid gap-3">
+                  <Label htmlFor="price">Nombre Propietario</Label>
+                  <Input
+                    id="contact_name"
+                    name="contact_name"
+                    type="text"
+                    placeholder="Ej: Juan"
+                    required
+                    value={formData.contact_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="price">Apellido Propietario</Label>
+                  <Input
+                    id="contact_last_name"
+                    name="contact_last_name"
+                    type="text"
+                    placeholder="Ej: Pérez"
+                    required
+                    value={formData.contact_last_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="price">Domicilio</Label>
+                  <Input
+                    id="contact_location"
+                    name="contact_location"
+                    type="text"
+                    placeholder="Ej: Lavalle 155"
+                    value={formData.contact_location}
+                    onChange={handleInputChange}
+                  />
+                </div> 
+                <div className="grid gap-3">
+                  <Label htmlFor="price">Celular</Label>
+                  <Input
+                    id="contact_phone"
+                    name="contact_phone"
+                    type="text"
+                    placeholder="Ej: 2983123456"
+                    required
+                    value={formData.contact_phone}
+                    onChange={handleInputChange}
+                  />
+                </div> 
+
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="bathrooms">Baños</Label>
-                <Input
-                  id="bathrooms"
-                  name="bathrooms"
-                  type="number"
-                  placeholder="Ej: 2"
-                  required
-                  value={formData.bathrooms}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="area">Área (m²)</Label>
-                <Input
-                  id="area"
-                  name="area"
-                  type="number"
-                  placeholder="Ej: 120"
-                  required
-                  value={formData.area}
-                  onChange={handleInputChange}
-                />
-              </div>
+
               <div className="grid gap-3">
                 <Label>Características</Label>
                 <div className="grid grid-cols-2 gap-2">
