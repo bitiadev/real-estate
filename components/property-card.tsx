@@ -21,11 +21,11 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
   const [isFavorite, setIsFavorite] = useState(false)
   const { toast } = useToast()
 
-  const formatPrice = (price: number, type: string) => {
+  const formatPrice = (price: number, type: string, currency: string) => {
     return (
       new Intl.NumberFormat("es-AR", {
         style: "currency",
-        currency: "ARS",
+        currency: currency,
         maximumFractionDigits: 0,
       }).format(price) + (type === "alquiler" ? "/mes" : "")
     )
@@ -73,6 +73,9 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
           <Badge className="absolute top-2 right-2" variant={property.type === "venta" ? "default" : "secondary"}>
             {property.type === "venta" ? "Venta" : "Alquiler"}
           </Badge>
+          <Badge className="absolute top-2 left-2 bg-orange-500 text-white">
+            {property.category}
+          </Badge>
 
           {/* Botón de favoritos */}
           {/* {showFavoriteButton && (
@@ -91,7 +94,7 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
         <CardContent className="p-4 flex-grow">
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-bold line-clamp-1">{property.title}</h3>
-            <p className="text-lg font-bold text-primary">{formatPrice(property.price, property.type)}</p>
+            <p className="text-lg font-bold text-primary">{formatPrice(property.price, property.type, property.currency)}</p>
           </div>
           <div className="flex items-center mt-1 text-gray-500 text-sm">
             <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />

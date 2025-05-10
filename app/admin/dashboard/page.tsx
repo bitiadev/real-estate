@@ -29,6 +29,7 @@ import { useToast } from "@/hooks/use-toast"
 import { getAllProperties, updatePropertyStatus, deleteProperty } from "@/lib/property-service"
 import type { Property } from "@/lib/property-service"
 import AdminHeader from "@/components/admin-header"
+import { useRouter } from "next/navigation"
 
 export default function AdminDashboard() {
   const [properties, setProperties] = useState<Property[]>([])
@@ -43,6 +44,7 @@ export default function AdminDashboard() {
     property: Property
     newStatus: string
   } | null>(null)
+  const router = useRouter()
 
   const { toast } = useToast()
 
@@ -165,11 +167,11 @@ export default function AdminDashboard() {
     }
   }
 
-  const formatPrice = (price: number, type: string) => {
+  const formatPrice = (price: number, type: string, currency: string) => {
     return (
       new Intl.NumberFormat("es-AR", {
         style: "currency",
-        currency: "ARS",
+        currency: currency,
         maximumFractionDigits: 0,
       }).format(price) + (type === "alquiler" ? "/mes" : "")
     )
@@ -360,7 +362,7 @@ export default function AdminDashboard() {
                         <TableRow key={property.id}>
                           <TableCell className="font-medium">{property.title}</TableCell>
                           <TableCell>{property.location}</TableCell>
-                          <TableCell>{formatPrice(property.price, property.type)}</TableCell>
+                          <TableCell>{formatPrice(property.price, property.type, property.currency)}</TableCell>
                           <TableCell>
                             <Badge
                               variant="outline"
@@ -499,7 +501,7 @@ export default function AdminDashboard() {
                         <TableRow key={property.id}>
                           <TableCell className="font-medium">{property.title}</TableCell>
                           <TableCell>{property.location}</TableCell>
-                          <TableCell>{formatPrice(property.price, property.type)}</TableCell>
+                          <TableCell>{formatPrice(property.price, property.type, property.currency)}</TableCell>
                           <TableCell>{getStatusBadge(property.status)}</TableCell>
                           <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
                           <TableCell className="text-right">
@@ -619,7 +621,7 @@ export default function AdminDashboard() {
                         <TableRow key={property.id}>
                           <TableCell className="font-medium">{property.title}</TableCell>
                           <TableCell>{property.location}</TableCell>
-                          <TableCell>{formatPrice(property.price, property.type)}</TableCell>
+                          <TableCell>{formatPrice(property.price, property.type, property.currency)}</TableCell>
                           <TableCell>{getStatusBadge(property.status)}</TableCell>
                           <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
                           <TableCell className="text-right">
