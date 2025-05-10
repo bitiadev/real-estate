@@ -417,7 +417,7 @@ export default function NuevaPropiedad() {
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="grid gap-3">
-                  <Label htmlFor="contact_name">Nombre de contacto</Label>
+                  <Label htmlFor="contact_name">Nombre Propietario</Label>
                   <Input
                     id="contact_name"
                     name="contact_name"
@@ -427,8 +427,8 @@ export default function NuevaPropiedad() {
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="grid gap-3">                       
-                  <Label htmlFor="contact_last_name">Apellido de contacto</Label>
+                <div className="grid gap-3">
+                  <Label htmlFor="contact_last_name">Apellido del Propietario</Label>
                   <Input
                     id="contact_last_name"
                     name="contact_last_name"
@@ -439,7 +439,7 @@ export default function NuevaPropiedad() {
                   />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="contact_phone">Teléfono de contacto</Label>
+                  <Label htmlFor="contact_phone">Teléfono del Propietario</Label>
                   <Input
                     id="contact_phone"
                     name="contact_phone"
@@ -451,7 +451,7 @@ export default function NuevaPropiedad() {
 
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="contact_location">Ubicación de contacto</Label>
+                  <Label htmlFor="contact_location">Domicilio del Propietario</Label>
                   <Input
                     id="contact_location"
                     name="contact_location"

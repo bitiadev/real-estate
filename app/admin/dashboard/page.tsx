@@ -165,14 +165,10 @@ export default function AdminDashboard() {
     }
   }
 
-  const formatPrice = (price: number, type: string) => {
+  const formatPrice = (type: string) => {    
     return (
-      new Intl.NumberFormat("es-AR", {
-        style: "currency",
-        currency: "ARS",
-        maximumFractionDigits: 0,
-      }).format(price) + (type === "alquiler" ? "/mes" : "")
-    )
+      (type === "alquiler" ? " /mes" : "")
+    );
   }
 
   const getStatusText = (status: string) => {
@@ -343,115 +339,121 @@ export default function AdminDashboard() {
                     </Button>
                   </div>
                 ) : (
-                  <Table>
+                    <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Título</TableHead>
-                        <TableHead>Ubicación</TableHead>
-                        <TableHead>Precio</TableHead>
-                        <TableHead>Tipo</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>Fecha</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
+                      <TableHead style={{ width: "15%" }}>Título</TableHead>
+                      <TableHead style={{ width: "15%" }}>Ubicación</TableHead>
+                      <TableHead style={{ width: "5%", padding: 0 }}></TableHead>
+                      <TableHead style={{ width: "10%" }}>Precio</TableHead>
+                      <TableHead style={{ width: "5%" }}>Operacion</TableHead>
+                      <TableHead style={{ width: "5%" }}>Estado</TableHead>
+                      <TableHead style={{ width: "10%" }}>Propietario</TableHead>
+                      <TableHead style={{ width: "10%" }}>Celular</TableHead>
+                      <TableHead style={{ width: "10%" }}>Fecha</TableHead>
+                      <TableHead style={{ width: "10%" }} className="text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property) => (
-                        <TableRow key={property.id}>
-                          <TableCell className="font-medium">{property.title}</TableCell>
-                          <TableCell>{property.location}</TableCell>
-                          <TableCell>{formatPrice(property.price, property.type)}</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant="outline"
-                              className={
-                                property.type === "venta" ? "bg-gray-50" : "bg-blue-50 text-blue-600 border-blue-200"
-                              }
+                      <TableRow key={property.id}>
+                        <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
+                        <TableCell style={{ width: "15%" }}>{property.location}</TableCell>
+                        <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
+                        <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>
+                        <TableCell style={{ width: "5%" }}>
+                        <Badge
+                          variant="outline"
+                          className={
+                          property.type === "venta" ? "bg-gray-50" : "bg-blue-50 text-blue-600 border-blue-200"
+                          }
+                        >
+                          {property.type === "venta" ? "Venta" : "Alquiler"}
+                        </Badge>
+                        </TableCell>
+                        <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
+                        <TableCell style={{ width: "5%", padding: 0 }}>{property.contact_name} {property.contact_last_name}</TableCell>
+                        <TableCell style={{ width: "5%" }}>{property.contact_phone}</TableCell>
+                        <TableCell style={{ width: "10%" }}>{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell style={{ width: "10%" }} className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Abrir menú</span>
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="h-4 w-4"
                             >
-                              {property.type === "venta" ? "Venta" : "Alquiler"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{getStatusBadge(property.status)}</TableCell>
-                          <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="h-4 w-4"
-                                  >
-                                    <circle cx="12" cy="12" r="1" />
-                                    <circle cx="12" cy="5" r="1" />
-                                    <circle cx="12" cy="19" r="1" />
-                                  </svg>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem asChild>
-                                  <Link href={`/admin/propiedades/editar/${property.id}`}>
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    <span>Editar</span>
-                                  </Link>
-                                </DropdownMenuItem>
+                            <circle cx="12" cy="12" r="1" />
+                            <circle cx="12" cy="5" r="1" />
+                            <circle cx="12" cy="19" r="1" />
+                            </svg>
+                          </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link href={`/admin/propiedades/editar/${property.id}`}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            <span>Editar</span>
+                            </Link>
+                          </DropdownMenuItem>
 
-                                <DropdownMenuSeparator />
+                          <DropdownMenuSeparator />
 
-                                {/* Opciones de cambio de estado */}
-                                {property.status !== "activa" && (
-                                  <DropdownMenuItem onClick={() => confirmUpdateStatus(property, "activa")}>
-                                    <span className="mr-2 h-4 w-4 rounded-full bg-green-100 flex items-center justify-center">
-                                      <span className="h-2 w-2 rounded-full bg-green-600"></span>
-                                    </span>
-                                    <span>Marcar como activa</span>
-                                  </DropdownMenuItem>
-                                )}
+                          {/* Opciones de cambio de estado */}
+                          {property.status !== "activa" && (
+                            <DropdownMenuItem onClick={() => confirmUpdateStatus(property, "activa")}>
+                            <span className="mr-2 h-4 w-4 rounded-full bg-green-100 flex items-center justify-center">
+                              <span className="h-2 w-2 rounded-full bg-green-600"></span>
+                            </span>
+                            <span>Marcar como activa</span>
+                            </DropdownMenuItem>
+                          )}
 
-                                {property.type === "venta" && property.status !== "vendida" && (
-                                  <DropdownMenuItem onClick={() => confirmUpdateStatus(property, "vendida")}>
-                                    <span className="mr-2 h-4 w-4 rounded-full bg-blue-100 flex items-center justify-center">
-                                      <span className="h-2 w-2 rounded-full bg-blue-600"></span>
-                                    </span>
-                                    <span>Marcar como vendida</span>
-                                  </DropdownMenuItem>
-                                )}
+                          {property.type === "venta" && property.status !== "vendida" && (
+                            <DropdownMenuItem onClick={() => confirmUpdateStatus(property, "vendida")}>
+                            <span className="mr-2 h-4 w-4 rounded-full bg-blue-100 flex items-center justify-center">
+                              <span className="h-2 w-2 rounded-full bg-blue-600"></span>
+                            </span>
+                            <span>Marcar como vendida</span>
+                            </DropdownMenuItem>
+                          )}
 
-                                {property.type === "alquiler" && property.status !== "alquilada" && (
-                                  <DropdownMenuItem onClick={() => confirmUpdateStatus(property, "alquilada")}>
-                                    <span className="mr-2 h-4 w-4 rounded-full bg-purple-100 flex items-center justify-center">
-                                      <span className="h-2 w-2 rounded-full bg-purple-600"></span>
-                                    </span>
-                                    <span>Marcar como alquilada</span>
-                                  </DropdownMenuItem>
-                                )}
+                          {property.type === "alquiler" && property.status !== "alquilada" && (
+                            <DropdownMenuItem onClick={() => confirmUpdateStatus(property, "alquilada")}>
+                            <span className="mr-2 h-4 w-4 rounded-full bg-purple-100 flex items-center justify-center">
+                              <span className="h-2 w-2 rounded-full bg-purple-600"></span>
+                            </span>
+                            <span>Marcar como alquilada</span>
+                            </DropdownMenuItem>
+                          )}
 
-                                <DropdownMenuSeparator />
+                          <DropdownMenuSeparator />
 
-                                <DropdownMenuItem
-                                  className="text-red-600"
-                                  onClick={() => confirmDeleteProperty(property)}
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  <span>Eliminar</span>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
+                          <DropdownMenuItem
+                            className="text-red-600"
+                            onClick={() => confirmDeleteProperty(property)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            <span>Eliminar</span>
+                          </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
                       ))}
                     </TableBody>
-                  </Table>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </Table>
+                  )}
+                  </CardContent>
+                </Card>
+                </TabsContent>
 
           <TabsContent value="venta" className="space-y-4">
             <Card>
@@ -483,26 +485,32 @@ export default function AdminDashboard() {
                     </Button>
                   </div>
                 ) : (
-                  <Table>
+<Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Título</TableHead>
-                        <TableHead>Ubicación</TableHead>
-                        <TableHead>Precio</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>Fecha</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
+                      <TableHead style={{ width: "15%" }}>Título</TableHead>
+                      <TableHead style={{ width: "15%" }}>Ubicación</TableHead>
+                      <TableHead style={{ width: "5%", padding: 0 }}></TableHead>
+                      <TableHead style={{ width: "10%" }}>Precio</TableHead>                      
+                      <TableHead style={{ width: "5%" }}>Estado</TableHead>
+                      <TableHead style={{ width: "10%" }}>Propietario</TableHead>
+                      <TableHead style={{ width: "10%" }}>Celular</TableHead>
+                      <TableHead style={{ width: "10%" }}>Fecha</TableHead>
+                      <TableHead style={{ width: "10%" }} className="text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property) => (
-                        <TableRow key={property.id}>
-                          <TableCell className="font-medium">{property.title}</TableCell>
-                          <TableCell>{property.location}</TableCell>
-                          <TableCell>{formatPrice(property.price, property.type)}</TableCell>
-                          <TableCell>{getStatusBadge(property.status)}</TableCell>
-                          <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
-                          <TableCell className="text-right">
+                      <TableRow key={property.id}>
+                        <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
+                        <TableCell style={{ width: "15%" }}>{property.location}</TableCell>
+                        <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
+                        <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>                        
+                        <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
+                        <TableCell style={{ width: "5%", padding: 0 }}>{property.contact_name} {property.contact_last_name}</TableCell>
+                        <TableCell style={{ width: "5%" }}>{property.contact_phone}</TableCell>
+                        <TableCell style={{ width: "10%" }}>{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell style={{ width: "10%" }} className="text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -606,23 +614,29 @@ export default function AdminDashboard() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Título</TableHead>
-                        <TableHead>Ubicación</TableHead>
-                        <TableHead>Precio</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>Fecha</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
+                      <TableHead style={{ width: "15%" }}>Título</TableHead>
+                      <TableHead style={{ width: "15%" }}>Ubicación</TableHead>
+                      <TableHead style={{ width: "5%", padding: 0 }}></TableHead>
+                      <TableHead style={{ width: "10%" }}>Precio</TableHead>                      
+                      <TableHead style={{ width: "5%" }}>Estado</TableHead>
+                      <TableHead style={{ width: "10%" }}>Propietario</TableHead>
+                      <TableHead style={{ width: "10%" }}>Celular</TableHead>
+                      <TableHead style={{ width: "10%" }}>Fecha</TableHead>
+                      <TableHead style={{ width: "10%" }} className="text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property) => (
-                        <TableRow key={property.id}>
-                          <TableCell className="font-medium">{property.title}</TableCell>
-                          <TableCell>{property.location}</TableCell>
-                          <TableCell>{formatPrice(property.price, property.type)}</TableCell>
-                          <TableCell>{getStatusBadge(property.status)}</TableCell>
-                          <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
-                          <TableCell className="text-right">
+                      <TableRow key={property.id}>
+                        <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
+                        <TableCell style={{ width: "15%" }}>{property.location}</TableCell>
+                        <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
+                        <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>
+                        <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
+                        <TableCell style={{ width: "5%", padding: 0 }}>{property.contact_name} {property.contact_last_name}</TableCell>
+                        <TableCell style={{ width: "5%" }}>{property.contact_phone}</TableCell>
+                        <TableCell style={{ width: "10%" }}>{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell style={{ width: "10%" }} className="text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">

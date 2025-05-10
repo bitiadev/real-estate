@@ -457,7 +457,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
               
               <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div className="grid gap-3">
-                  <Label htmlFor="price">Nombre Propietario</Label>
+                  <Label htmlFor="price">Nombre del Propietario</Label>
                   <Input
                     id="contact_name"
                     name="contact_name"
@@ -469,7 +469,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                   />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="price">Apellido Propietario</Label>
+                  <Label htmlFor="price">Apellido del Propietario</Label>
                   <Input
                     id="contact_last_name"
                     name="contact_last_name"
@@ -481,7 +481,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                   />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="price">Domicilio</Label>
+                  <Label htmlFor="price">Domicilio del Propietario</Label>
                   <Input
                     id="contact_location"
                     name="contact_location"
@@ -492,7 +492,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                   />
                 </div> 
                 <div className="grid gap-3">
-                  <Label htmlFor="price">Celular</Label>
+                  <Label htmlFor="price">Celular del Propietario</Label>
                   <Input
                     id="contact_phone"
                     name="contact_phone"
