@@ -138,11 +138,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     return score
   }
 
-  const formatPrice = (price: number, type: string) => {
+  const formatPrice = (price: number, type: string, currency: string) => {
     return (
       new Intl.NumberFormat("es-AR", {
         style: "currency",
-        currency: "ARS",
+        currency: currency,
         maximumFractionDigits: 0,
       }).format(price) + (type === "alquiler" ? "/mes" : "")
     )
@@ -262,7 +262,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   return (
     <div className="px-4 md:px-8 py-8 md:py-12">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <Link href="/propiedades" className="inline-flex items-center text-gray-600 hover:text-gray-900">
+        <Link href="/propiedades" className="inline-flex items-center text-gray-600 hover:text-gray-900 w-full justify-end">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver a propiedades
         </Link>
@@ -327,7 +327,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                   >
                     {property.type === "venta" ? "Venta" : "Alquiler"}
                   </Badge>
-
+                  <Badge
+                    className="absolute top-4 left-4 text-sm px-3 py-1 bg-orange-500 text-white"
+                  >
+                    {property.category}
+                  </Badge>
                   {/* Controles del carrusel */}
                   {images.length > 1 && (
                     <>
@@ -410,7 +414,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
               <span className="text-gray-600">{property.location}</span>
             </div>
             <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
-            <p className="text-2xl font-bold text-gray-900 mb-6">{formatPrice(property.price, property.type)}</p>
+            <p className="text-2xl font-bold text-gray-900 mb-6">{formatPrice(property.price, property.type, property.currency)}</p>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
@@ -689,7 +693,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                           <div>
                             <h4 className="font-medium text-sm line-clamp-1">{prop.title}</h4>
                             <p className="text-gray-500 text-xs">{prop.location}</p>
-                            <p className="text-sm font-semibold mt-1">{formatPrice(prop.price, prop.type)}</p>
+                            <p className="text-sm font-semibold mt-1">{formatPrice(prop.price, prop.type, prop.currency)}</p>
                           </div>
                         </div>
                       </Link>

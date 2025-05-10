@@ -343,18 +343,6 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                 />
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-10">
-                <div className="grid gap-3 md:col-span-2">
-                  <Label htmlFor="price">Precio</Label>
-                  <Input
-                    id="price"
-                    name="price"
-                    type="number"
-                    placeholder="Ej: 250000"
-                    required
-                    value={formData.price}
-                    onChange={handleInputChange}
-                  />
-                </div>
                 <div className="grid gap-3 md:col-span-1">
                   <Label htmlFor="currency">Moneda</Label>
                   <Select
@@ -370,6 +358,19 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                   </SelectContent>
                   </Select>
                 </div>
+                <div className="grid gap-3 md:col-span-2">
+                  <Label htmlFor="price">Precio</Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    placeholder="Ej: 250000"
+                    required
+                    value={formData.price}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                
                 <div className="grid gap-3 md:col-span-2">
                   <Label htmlFor="type">Operacion</Label>
                   <Select

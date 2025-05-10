@@ -250,11 +250,11 @@ export default function PropertiesAdminPage() {
     }
   }
 
-  const formatPrice = (price: number, type: string) => {
+  const formatPrice = (price: number, type: string, currency: string) => {
     return (
       new Intl.NumberFormat("es-AR", {
         style: "currency",
-        currency: "ARS",
+        currency: currency,
         maximumFractionDigits: 0,
       }).format(price) + (type === "alquiler" ? "/mes" : "")
     )
@@ -552,7 +552,7 @@ export default function PropertiesAdminPage() {
                             </TableCell>
                             <TableCell className="max-w-[200px] truncate">{property.title}</TableCell>
                             <TableCell className="max-w-[150px] truncate">{property.location}</TableCell>
-                            <TableCell>{formatPrice(property.price, property.type)}</TableCell>
+                            <TableCell>{formatPrice(property.price, property.type, property.currency)}</TableCell>
                             <TableCell>
                               <Badge
                                 variant="outline"
@@ -742,7 +742,7 @@ export default function PropertiesAdminPage() {
                             </TableCell>
                             <TableCell className="max-w-[200px] truncate">{property.title}</TableCell>
                             <TableCell className="max-w-[150px] truncate">{property.location}</TableCell>
-                            <TableCell>{formatPrice(property.price, property.type)}</TableCell>
+                            <TableCell>{formatPrice(property.price, property.type, property.currency)}</TableCell>
                             <TableCell>{getStatusBadge(property.status)}</TableCell>
                             <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
                             <TableCell className="text-right">
@@ -891,7 +891,7 @@ export default function PropertiesAdminPage() {
                             </TableCell>
                             <TableCell className="max-w-[200px] truncate">{property.title}</TableCell>
                             <TableCell className="max-w-[150px] truncate">{property.location}</TableCell>
-                            <TableCell>{formatPrice(property.price, property.type)}</TableCell>
+                            <TableCell>{formatPrice(property.price, property.type, property.currency)}</TableCell>
                             <TableCell>{getStatusBadge(property.status)}</TableCell>
                             <TableCell>{new Date(property.created_at).toLocaleDateString()}</TableCell>
                             <TableCell className="text-right">
