@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowLeft, Loader2 } from "lucide-react"
+import { ArrowLeft, Currency, Loader2 } from "lucide-react"
 import { supabase } from "@/lib/supabaseClient"
 import { useToast } from "@/hooks/use-toast"
 // import ImageUpload from "@/components/image-upload" // Puedes comentar o eliminar si no lo usas directamente
@@ -22,6 +22,7 @@ import {
   // setMainImage, // No necesario directamente aquí al crear
   // deletePropertyImageComplete, // No necesario directamente aquí al crear
 } from "@/lib/storage-service"
+import categories from "@/data/categories.json"
 
 interface UploadedImage {
   id?: number; // Opcional, si guardas referencia temporal en DB (aunque el nuevo enfoque evita esto)
@@ -52,7 +53,13 @@ export default function NuevaPropiedad() {
       airConditioning: false,
       heating: false,
     },
-    visible: true
+    visible: true,
+    category: "",
+    contact_name: "",
+    contact_last_name: "",
+    contact_phone: "",
+    contact_location: "",
+    currency: "ARS"
   })
   const [images, setImages] = useState<UploadedImage[]>([]) // Usaremos este estado para las imágenes subidas
 
@@ -290,22 +297,38 @@ export default function NuevaPropiedad() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="price">Precio</Label>
-                  <Input
-                    id="price"
-                    name="price"
-                    type="number"
-                    placeholder="Ej: 250000"
-                    required
-                    value={formData.price}
-                    onChange={handleInputChange}
-                  />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div className="grid gap-3 grid-cols-2">
+                  <div className="flex flex-col gap-3">
+                    <Label htmlFor="currency">Moneda</Label>
+                    {/* Select para moneda */}
+                    <Select value={formData.currency} onValueChange={(value) => handleSelectChange("currency", value)}>
+                      <SelectTrigger id="currency">
+                        <SelectValue placeholder="Selecciona la moneda" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ARS">ARS</SelectItem>
+                        <SelectItem value="USD">USD</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <Label htmlFor="price">Precio</Label>
+                    <Input
+                      id="price"
+                      name="price"
+                      type="number"
+                      placeholder="Ej: 250000"
+                      required
+                      value={formData.price}
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
 
                 <div className="grid gap-3">
-                  <Label htmlFor="type">Tipo</Label>
+                  <Label htmlFor="type">Operacion</Label>
                   <Select value={formData.type} onValueChange={(value) => handleSelectChange("type", value)}>
                     <SelectTrigger id="type">
                       <SelectValue placeholder="Selecciona el tipo" />
@@ -315,6 +338,24 @@ export default function NuevaPropiedad() {
                       <SelectItem value="alquiler">Alquiler</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="grid gap-3">
+                  <Label htmlFor="category">Categoría</Label>
+                  <Select value={formData.category} onValueChange={(value) => handleSelectChange("category", value)} required>
+                    <SelectTrigger id="category">
+                      <SelectValue placeholder="Selecciona la categoría" />
+                    </SelectTrigger>
+                    <SelectContent>
+                     {
+                      categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))
+                     }
+                    </SelectContent>
+                  </Select> 
                 </div>
               </div>
 

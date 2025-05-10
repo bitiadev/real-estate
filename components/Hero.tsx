@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search } from "lucide-react"
 import Link from 'next/link'
+import cities from '@/data/cities.json' 
+import categories from '@/data/categories.json' 
 
 // Componente de carrusel de imágenes
 interface HeroCarouselProps {
@@ -90,23 +92,45 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
             {/* Barra de búsqueda */}
             
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div className="md:col-span-2">
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Ubicacion"/>
+                      <SelectValue placeholder="Ciudad"/>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="TresArroyos">Tres Arroyos</SelectItem>
-                      <SelectItem value="Claromeco">Claromeco</SelectItem>
-                      <SelectItem value="Otras">Otras</SelectItem>
+                      <SelectItem value="all">Todas</SelectItem>
+                      {
+                        cities.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="md:col-span-2">
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos</SelectItem>
+                      {
+                        categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))
+                      }
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Tipo" />
+                      <SelectValue placeholder="Operacion" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos</SelectItem>

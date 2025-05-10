@@ -11,7 +11,12 @@ CREATE TABLE IF NOT EXISTS properties (
   area NUMERIC NOT NULL,
   features JSONB,
   status TEXT NOT NULL DEFAULT 'activa' CHECK (status IN ('activa', 'vendida', 'alquilada')),
+  currency TEXT NOT NULL DEFAULT 'ARS' CHECK (currency IN ('USD', 'ARS')),
   featured BOOLEAN DEFAULT false,
+  contact_name TEXT NOT NULL,
+  contact_last_name TEXT NOT NULL,
+  contact_phone TEXT NOT NULL,
+  contact_location TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -53,6 +58,8 @@ CREATE TABLE IF NOT EXISTS leads (
   request_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   notes TEXT,
   status TEXT NOT NULL DEFAULT 'pendiente' CHECK (status IN ('pendiente', 'en_proceso', 'resuelto', 'cancelado')),
+  currency TEXT NOT NULL DEFAULT 'ARS' CHECK (currency IN ('USD', 'ARS')),
+  property_category TEXT NOT NULL DEFAULT 'Casa';
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
