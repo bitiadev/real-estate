@@ -32,6 +32,7 @@ import { Search, Plus, Edit, Trash2, ArrowUpDown, Loader2, UserPlus, Phone, Cale
 import { getAllLeads, updateLead, deleteLead } from "@/lib/lead-service"
 import type { Lead } from "@/lib/lead-service"
 import { useToast } from "@/hooks/use-toast"
+import categories from '@/data/categories.json' 
 
 export default function LeadsAdminPage() {
   const router = useRouter()
@@ -51,6 +52,7 @@ export default function LeadsAdminPage() {
   const [filterOptions, setFilterOptions] = useState({
     property_type: "all",
     status: "all",
+    property_category: "all",
   })
 
   // Cargar leads al montar el componente
@@ -90,7 +92,9 @@ export default function LeadsAdminPage() {
         (lead) =>
           lead.name.toLowerCase().includes(term) ||
           lead.phone.toLowerCase().includes(term) ||
-          lead.notes?.toLowerCase().includes(term),
+          lead.notes?.toLowerCase().includes(term) ||
+          lead.property_type.toLowerCase().includes(term) ||
+          lead.property_category.toLowerCase().includes(term)
       )
     }
 
@@ -103,6 +107,12 @@ export default function LeadsAdminPage() {
     if (filterOptions.status !== "all") {
       filtered = filtered.filter((lead) => lead.status === filterOptions.status)
     }
+
+    // Filtrar por categoría de propiedad
+    if (filterOptions.property_category !== "all") {
+      filtered = filtered.filter((lead) => lead.property_category === filterOptions.property_category)
+    }
+    
 
     // Ordenar leads
     filtered = sortLeads(filtered, sortBy)
@@ -143,6 +153,7 @@ export default function LeadsAdminPage() {
     setFilterOptions({
       property_type: "all",
       status: "all",
+      property_category: "all",
     })
     setSearchTerm("")
     setSortBy("newest")
@@ -310,7 +321,7 @@ export default function LeadsAdminPage() {
       {/* Filtros y búsqueda */}
       <Card className="mb-6">
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 text-gray-400" />
@@ -329,14 +340,32 @@ export default function LeadsAdminPage() {
                 onValueChange={(value) => handleFilterChange("property_type", value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Tipo de operacion" />
+                  <SelectValue placeholder="Operacion" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos los tipos</SelectItem>
+                  <SelectItem value="all">Todas las Operaciones</SelectItem>
                   <SelectItem value="venta">Compra</SelectItem>
                   <SelectItem value="alquiler">Alquiler</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div>
+              <Select value={filterOptions.property_category} onValueChange={(value) => handleFilterChange("property_category", value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos los tipos</SelectItem>
+                      {
+                        categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
             </div>
 
             <div>
@@ -420,8 +449,10 @@ export default function LeadsAdminPage() {
                   <TableRow>
                     <TableHead>Nombre</TableHead>
                     <TableHead>Teléfono</TableHead>
+                    <TableHead>Operacion</TableHead>
                     <TableHead>Tipo</TableHead>
-                    <TableHead>Presupuesto</TableHead>
+                    <TableHead>Presupuesto</TableHead>                    
+                    <TableHead>Moneda</TableHead>
                     <TableHead>Fecha</TableHead>
                     <TableHead>Estado</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
@@ -434,11 +465,20 @@ export default function LeadsAdminPage() {
                       <TableCell>
                         <div className="flex items-center">
                           <Phone className="h-4 w-4 mr-2 text-gray-500" />
-                          {lead.phone}
+                            <a
+                            href={`https://wa.me/${lead.phone}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline"
+                            >
+                            {lead.phone}
+                            </a>
                         </div>
                       </TableCell>
                       <TableCell>{getPropertyTypeBadge(lead.property_type)}</TableCell>
+                      <TableCell>{lead.property_category}</TableCell>
                       <TableCell>{formatBudget(lead.budget)}</TableCell>
+                      <TableCell>{lead.currency}</TableCell>
                       <TableCell>
                         <div className="flex items-center text-gray-500">
                           <Calendar className="h-4 w-4 mr-2" />

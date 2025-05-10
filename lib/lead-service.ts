@@ -6,11 +6,13 @@ export type Lead = {
   phone: string
   property_type: string
   budget: number
+  currency: string
   request_date: string
   notes?: string
   status: string
   created_at: string
   updated_at: string
+  property_category: string
 }
 
 /**

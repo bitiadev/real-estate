@@ -11,10 +11,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Loader2 } from "lucide-react"
+import { ArrowLeft, Currency, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { getLeadById, updateLead } from "@/lib/lead-service"
 import AdminHeader from "@/components/admin-header"
+import categories from '@/data/categories.json' 
 
 export default function EditarLead({ params }: { params: Promise<{ id: string }> }) {
   const [leadId, setLeadId] = useState<number | null>(null);
@@ -26,7 +27,9 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
     name: "",
     phone: "",
     property_type: "venta",
+    property_category: "",
     budget: "",
+    currency: "ARS",
     notes: "",
     status: "pendiente",
   })
@@ -56,7 +59,9 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
           name: lead.name,
           phone: lead.phone,
           property_type: lead.property_type,
+          property_category: lead.property_category,
           budget: lead.budget.toString(),
+          currency: lead.currency,
           notes: lead.notes || "",
           status: lead.status,
         })
@@ -93,7 +98,9 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
         name: formData.name,
         phone: formData.phone,
         property_type: formData.property_type,
+        property_category: formData.property_category,
         budget: Number(formData.budget),
+        currency: formData.currency,
         notes: formData.notes,
         status: formData.status,
       }
@@ -138,7 +145,7 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <AdminHeader showSearch={false} />
-      <div className="max-w-2xl py-8 mx-auto px-4 md:px-6">
+      <div className="max-w-2xl py-8 mx-auto md:max-w-full md:mx-10 px-4 md:px-6">
         <h1 className="text-2xl font-bold mb-4">Editar Lead</h1>
         <Link href="/admin/leads" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6 w-full justify-end">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -153,33 +160,36 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="name">Nombre completo</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Ej: Juan Pérez"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="grid gap-3">
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    placeholder="Ej: +54 11 1234-5678"
-                    required
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                  />
-                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="grid gap-3">
-                    <Label htmlFor="property_type">Tipo de operacion</Label>
+                    <Label htmlFor="name">Nombre completo</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      placeholder="Ej: Juan Pérez"
+                      required
+                      value={formData.name}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className="grid gap-3">
+                    <Label htmlFor="phone">Teléfono</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      placeholder="Ej: +54 11 1234-5678"
+                      required
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                  <div className="grid gap-3">
+                    <Label htmlFor="property_type">Operacion</Label>
                     <Select
                       value={formData.property_type}
                       onValueChange={(value) => handleSelectChange("property_type", value)}
@@ -193,6 +203,28 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
                       </SelectContent>
                     </Select>
                   </div>
+                  
+                  <div className="grid gap-3">
+                    <Label htmlFor="property_category">Tipo</Label>
+                    <Select
+                      value={formData.property_category}
+                      onValueChange={(value) => handleSelectChange("property_category", value)}
+                    >
+                      <SelectTrigger id="property_category">
+                        <SelectValue placeholder="Selecciona el tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos los tipos</SelectItem>
+                      {
+                        categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))
+                      }                   
+                      </SelectContent>
+                    </Select>
+                  </div>              
 
                   <div className="grid gap-3">
                     <Label htmlFor="budget">Presupuesto</Label>
@@ -206,22 +238,39 @@ export default function EditarLead({ params }: { params: Promise<{ id: string }>
                       onChange={handleInputChange}
                     />
                   </div>
+
+                  <div className="grid gap-3">
+                    <Label htmlFor="currency">Moneda</Label>
+                    <Select
+                      value={formData.currency}
+                      onValueChange={(value) => handleSelectChange("currency", value)}
+                    >
+                      <SelectTrigger id="currency">
+                        <SelectValue placeholder="Selecciona la moneda" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ARS">ARS</SelectItem>
+                        <SelectItem value="USD">USD</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="status">Estado</Label>
+                    <Select value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
+                      <SelectTrigger id="status">
+                        <SelectValue placeholder="Selecciona el estado" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pendiente">Pendiente</SelectItem>
+                        <SelectItem value="en_proceso">En proceso</SelectItem>
+                        <SelectItem value="resuelto">Resuelto</SelectItem>
+                        <SelectItem value="cancelado">Cancelado</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
                 </div>
 
-                <div className="grid gap-3">
-                  <Label htmlFor="status">Estado</Label>
-                  <Select value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
-                    <SelectTrigger id="status">
-                      <SelectValue placeholder="Selecciona el estado" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pendiente">Pendiente</SelectItem>
-                      <SelectItem value="en_proceso">En proceso</SelectItem>
-                      <SelectItem value="resuelto">Resuelto</SelectItem>
-                      <SelectItem value="cancelado">Cancelado</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
 
                 <div className="grid gap-3">
                   <Label htmlFor="notes">Notas</Label>
