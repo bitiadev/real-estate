@@ -33,6 +33,7 @@ import { Building, Search, Plus, Edit, Trash2, Eye, Filter, ArrowUpDown, Loader2
 import { getAllProperties, updatePropertyStatus, deleteProperty, updateProperty } from "@/lib/property-service"
 import type { Property } from "@/lib/property-service"
 import { useToast } from "@/hooks/use-toast"
+import cities from '@/data/cities.json' 
 
 export default function PropertiesAdminPage() {
   const router = useRouter()
@@ -390,17 +391,19 @@ export default function PropertiesAdminPage() {
             </div>
 
             <div>
-              <Select /* defaultValue="TresArroyos" */ value={filterOptions.location} onValueChange={(value) => handleFilterChange("location", value)}>
+              <Select value={filterOptions.location} onValueChange={(value) => handleFilterChange("location", value)}>
                 <SelectTrigger>
-                  <div className="flex items-center">
-                    <MapPin className="h-4 w-4 mr-2 text-gray-500" />
-                    <SelectValue placeholder="Ubicación" />
-                  </div>
+                  <SelectValue placeholder="Ciudad"/>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all_locations">Todas las ubicaciones</SelectItem>
-                  <SelectItem value="Tres Arroyos">Tres Arroyos</SelectItem>
-                  <SelectItem value="Claromeco">Claromeco</SelectItem>                  
+                  <SelectItem value="all_locations">Todas</SelectItem>
+                  {
+                    cities.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))
+                  }
                 </SelectContent>
               </Select>
             </div>

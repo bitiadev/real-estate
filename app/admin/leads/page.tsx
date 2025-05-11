@@ -82,6 +82,16 @@ export default function LeadsAdminPage() {
     }
   }
 
+  const formatPrice = (budget: number, currency: string) => {
+    return (
+      new Intl.NumberFormat("es-AR", {
+        style: "currency",
+        currency: currency,
+        maximumFractionDigits: 0,
+      }).format(budget)
+    )
+  }
+
   const filterLeads = () => {
     let filtered = [...leads]
 
@@ -451,8 +461,8 @@ export default function LeadsAdminPage() {
                     <TableHead>Teléfono</TableHead>
                     <TableHead>Operacion</TableHead>
                     <TableHead>Tipo</TableHead>
-                    <TableHead>Presupuesto</TableHead>                    
-                    <TableHead>Moneda</TableHead>
+                    <TableHead>Presupuesto</TableHead>                                        
+                    <TableHead>Notas</TableHead>
                     <TableHead>Fecha</TableHead>
                     <TableHead>Estado</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
@@ -476,9 +486,9 @@ export default function LeadsAdminPage() {
                         </div>
                       </TableCell>
                       <TableCell>{getPropertyTypeBadge(lead.property_type)}</TableCell>
-                      <TableCell>{lead.property_category}</TableCell>
-                      <TableCell>{formatBudget(lead.budget)}</TableCell>
-                      <TableCell>{lead.currency}</TableCell>
+                      <TableCell>{lead.property_category}</TableCell>                      
+                      <TableCell className="w-[10%]">{formatPrice(lead.budget, lead.currency)}</TableCell>
+                      <TableCell className="w-[20%]">{lead.notes}</TableCell>
                       <TableCell>
                         <div className="flex items-center text-gray-500">
                           <Calendar className="h-4 w-4 mr-2" />

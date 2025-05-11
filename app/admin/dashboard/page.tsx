@@ -28,7 +28,7 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { getAllProperties, updatePropertyStatus, deleteProperty } from "@/lib/property-service"
 import type { Property } from "@/lib/property-service"
-import AdminHeader from "@/components/admin-header"
+
 
 export default function AdminDashboard() {
   const [properties, setProperties] = useState<Property[]>([])
@@ -165,10 +165,14 @@ export default function AdminDashboard() {
     }
   }
 
-  const formatPrice = (type: string) => {    
+  const formatPrice = (price: number, type: string, currency: string) => {
     return (
-      (type === "alquiler" ? " /mes" : "")
-    );
+      new Intl.NumberFormat("es-AR", {
+        style: "currency",
+        currency: currency,
+        maximumFractionDigits: 0,
+      }).format(price) + (type === "alquiler" ? "/mes" : "")
+    )
   }
 
   const getStatusText = (status: string) => {
@@ -342,26 +346,24 @@ export default function AdminDashboard() {
                     <Table>
                     <TableHeader>
                       <TableRow>
-                      <TableHead style={{ width: "15%" }}>Título</TableHead>
-                      <TableHead style={{ width: "15%" }}>Ubicación</TableHead>
-                      <TableHead style={{ width: "5%", padding: 0 }}></TableHead>
-                      <TableHead style={{ width: "10%" }}>Precio</TableHead>
-                      <TableHead style={{ width: "5%" }}>Operacion</TableHead>
-                      <TableHead style={{ width: "5%" }}>Estado</TableHead>
-                      <TableHead style={{ width: "10%" }}>Propietario</TableHead>
-                      <TableHead style={{ width: "10%" }}>Celular</TableHead>
-                      <TableHead style={{ width: "10%" }}>Fecha</TableHead>
-                      <TableHead style={{ width: "10%" }} className="text-right">Acciones</TableHead>
+                      <TableHead className="w-[15%]">Título</TableHead>
+                      <TableHead className="w-[20%]">Ubicación</TableHead>
+                      <TableHead className="w-[10%]">Precio</TableHead>
+                      <TableHead className="w-[5%]">Operacion</TableHead>
+                      <TableHead className="w-[5%]">Estado</TableHead>
+                      <TableHead className="w-[10%]">Propietario</TableHead>
+                      <TableHead className="w-[10%]">Celular</TableHead>
+                      <TableHead className="w-[10%]">Fecha</TableHead>
+                      <TableHead className="w-[10%] text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property) => (
                       <TableRow key={property.id}>
-                        <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
-                        <TableCell className="w-[15%] max-w-[200px] truncate">{property.location}</TableCell>
-                        <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
-                        <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>
-                        <TableCell style={{ width: "5%" }}>
+                        <TableCell className="max-w-[200px] truncate">{property.title}</TableCell>
+                        <TableCell className="w-[20%] max-w-[200px] truncate">{property.location}</TableCell>                        
+                        <TableCell className="w-[10%]">{formatPrice(property.price, property.type, property.currency)}</TableCell>
+                        <TableCell className="w-[5%]">
                         <Badge
                           variant="outline"
                           className={
@@ -371,11 +373,11 @@ export default function AdminDashboard() {
                           {property.type === "venta" ? "Venta" : "Alquiler"}
                         </Badge>
                         </TableCell>
-                        <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
-                        <TableCell style={{ width: "5%", padding: 0 }}>{property.contact_name} {property.contact_last_name}</TableCell>
-                        <TableCell style={{ width: "5%" }}>{property.contact_phone}</TableCell>
-                        <TableCell style={{ width: "10%" }}>{new Date(property.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell style={{ width: "10%" }} className="text-right">
+                        <TableCell className="w-[5%]">{getStatusBadge(property.status)}</TableCell>
+                        <TableCell className="w-[10%]">{property.contact_name} {property.contact_last_name}</TableCell>
+                        <TableCell className="w-[5%]">{property.contact_phone}</TableCell>
+                        <TableCell className="w-[5%]">{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell className="w-[10%] text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -488,29 +490,27 @@ export default function AdminDashboard() {
 <Table>
                     <TableHeader>
                       <TableRow>
-                      <TableHead style={{ width: "15%" }}>Título</TableHead>
-                      <TableHead style={{ width: "15%" }}>Ubicación</TableHead>
-                      <TableHead style={{ width: "5%", padding: 0 }}></TableHead>
-                      <TableHead style={{ width: "10%" }}>Precio</TableHead>                      
-                      <TableHead style={{ width: "5%" }}>Estado</TableHead>
-                      <TableHead style={{ width: "10%" }}>Propietario</TableHead>
-                      <TableHead style={{ width: "10%" }}>Celular</TableHead>
-                      <TableHead style={{ width: "10%" }}>Fecha</TableHead>
-                      <TableHead style={{ width: "10%" }} className="text-right">Acciones</TableHead>
+                      <TableHead className="w-[15%]">Título</TableHead>
+                      <TableHead className="w-[20%]">Ubicación</TableHead>
+                      <TableHead className="w-[10%]">Precio</TableHead>
+                      <TableHead className="w-[5%]">Estado</TableHead>
+                      <TableHead className="w-[10%]">Propietario</TableHead>
+                      <TableHead className="w-[10%]">Celular</TableHead>
+                      <TableHead className="w-[10%]">Fecha</TableHead>
+                      <TableHead className="w-[10%] text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property) => (
                       <TableRow key={property.id}>
-                        <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
-                        <TableCell className="w-[15%] max-w-[200px] truncate">{property.location}</TableCell>
-                        <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
-                        <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>                        
-                        <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
-                        <TableCell style={{ width: "5%", padding: 0 }}>{property.contact_name} {property.contact_last_name}</TableCell>
-                        <TableCell style={{ width: "5%" }}>{property.contact_phone}</TableCell>
-                        <TableCell style={{ width: "10%" }}>{new Date(property.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell style={{ width: "10%" }} className="text-right">
+                        <TableCell className="max-w-[200px] truncate">{property.title}</TableCell>
+                        <TableCell className="w-[20%] max-w-[200px] truncate">{property.location}</TableCell>
+                        <TableCell className="w-[10%] text-left">{formatPrice(property.price, property.type, property.currency)}</TableCell>
+                        <TableCell className="w-[5%]">{getStatusBadge(property.status)}</TableCell>
+                        <TableCell className="w-[10%]">{property.contact_name} {property.contact_last_name}</TableCell>
+                        <TableCell className="w-[5%]">{property.contact_phone}</TableCell>
+                        <TableCell className="w-[5%]">{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell className="w-[10%] text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -614,29 +614,27 @@ export default function AdminDashboard() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                      <TableHead style={{ width: "15%" }}>Título</TableHead>
-                      <TableHead style={{ width: "15%" }}>Ubicación</TableHead>
-                      <TableHead style={{ width: "5%", padding: 0 }}></TableHead>
-                      <TableHead style={{ width: "10%" }}>Precio</TableHead>                      
-                      <TableHead style={{ width: "5%" }}>Estado</TableHead>
-                      <TableHead style={{ width: "10%" }}>Propietario</TableHead>
-                      <TableHead style={{ width: "10%" }}>Celular</TableHead>
-                      <TableHead style={{ width: "10%" }}>Fecha</TableHead>
-                      <TableHead style={{ width: "10%" }} className="text-right">Acciones</TableHead>
+                      <TableHead className="w-[15%]">Título</TableHead>
+                      <TableHead className="w-[20%]">Ubicación</TableHead>                      
+                      <TableHead className="w-[10%]">Precio</TableHead>
+                      <TableHead className="w-[5%]">Estado</TableHead>
+                      <TableHead className="w-[10%]">Propietario</TableHead>
+                      <TableHead className="w-[10%]">Celular</TableHead>
+                      <TableHead className="w-[10%]">Fecha</TableHead>
+                      <TableHead className="w-[10%] text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property) => (
                       <TableRow key={property.id}>
-                        <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
-                        <TableCell className="w-[15%] max-w-[200px] truncate">{property.location}</TableCell>
-                        <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
-                        <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>
-                        <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
-                        <TableCell style={{ width: "5%", padding: 0 }}>{property.contact_name} {property.contact_last_name}</TableCell>
-                        <TableCell style={{ width: "5%" }}>{property.contact_phone}</TableCell>
-                        <TableCell style={{ width: "10%" }}>{new Date(property.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell style={{ width: "10%" }} className="text-right">
+                        <TableCell className="max-w-[200px] truncate">{property.title}</TableCell>
+                        <TableCell className="w-[20%] max-w-[200px] truncate">{property.location}</TableCell>
+                        <TableCell className="w-[10%]">{formatPrice(property.price, property.type, property.currency)}</TableCell>
+                        <TableCell className="w-[5%]">{getStatusBadge(property.status)}</TableCell>
+                        <TableCell className="w-[5%] p-0">{property.contact_name} {property.contact_last_name}</TableCell>
+                        <TableCell className="w-[5%]">{property.contact_phone}</TableCell>
+                        <TableCell className="w-[10%]">{new Date(property.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell className="w-[10%] text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
