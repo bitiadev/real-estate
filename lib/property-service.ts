@@ -28,6 +28,8 @@ export type Property = {
   contact_phone: string;
   contact_location?: string;
   currency: string;
+  lat: number;
+  lon: number;
 }
 
 /**

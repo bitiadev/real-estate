@@ -23,6 +23,8 @@ import {
 import { getPropertyById } from "@/lib/property-service"
 import { supabase } from "@/lib/supabaseClient"
 import categories from "@/data/categories.json"
+import AddressAutocomplete from "@/components/adress-autocomplete"
+import AddressAutocompleteGoogle from "@/components/autocomplete-input"
 
 export default function EditarPropiedad({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -53,7 +55,9 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
     contact_last_name: "",
     contact_phone: "",
     contact_location: "",
-    currency: "ARS"
+    currency: "ARS",
+    lat: 0,
+    lon: 0,
   })
   const [images, setImages] = useState<Array<{ id: number; url: string; main_image: boolean }>>([])
 
@@ -109,6 +113,8 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
           contact_phone: property.contact_phone,
           contact_location: property.contact_location || "",
           currency: property.currency,
+          lat: property.lat,
+          lon: property.lon
         })
 
         // Cargar imágenes
@@ -293,6 +299,15 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
     }
   }
 
+  const handleSelectAddress = (place: any) => {
+    console.log('Seleccionado:', place.display_name, place.lat, place.lon)
+  }
+
+  const handleAddressSelect = (address: any) => {
+    //console.log("Dirección seleccionada:", address)
+    setFormData((prev) => ({ ...prev, location: address.formattedAddress, lat: address.lat, lon: address.lng }))
+  }
+
   if (isLoadingProperty) {
     return (
       <div className="max-w-4xl py-8 flex flex-col items-center justify-center mx-auto px-4 md:px-6">
@@ -416,7 +431,11 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                   />
                 </div>
               </div>
-              
+              <div className="p-4">
+         
+               {/*  <AddressAutocomplete onSelect={handleSelect} /> */}
+                <AddressAutocompleteGoogle onAddressSelect={handleAddressSelect} value={formData.location} />
+              </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 <div className="grid gap-3">
                   <Label htmlFor="bedrooms">Habitaciones</Label>
