@@ -276,6 +276,8 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
           features: formData.features,
           status: formData.status,
           updated_at: new Date().toISOString(),
+          lat: formData.lat,
+          lon: formData.lon
         })
         .eq("id", propertyId)
 
@@ -357,7 +359,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-10">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-7">
                 <div className="grid gap-3 md:col-span-1">
                   <Label htmlFor="currency">Moneda</Label>
                   <Select
@@ -419,7 +421,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="grid gap-3 md:col-span-3">
+                {/* <div className="grid gap-3 md:col-span-3">
                   <Label htmlFor="location">Ubicación</Label>
                   <Input
                     id="location"
@@ -429,12 +431,15 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                     value={formData.location}
                     onChange={handleInputChange}
                   />
-                </div>
+                </div> */}
               </div>
-              <div className="p-4">
-         
+              <div className="">
+                  
                {/*  <AddressAutocomplete onSelect={handleSelect} /> */}
-                <AddressAutocompleteGoogle onAddressSelect={handleAddressSelect} value={formData.location} />
+                <AddressAutocompleteGoogle 
+                  onAddressSelect={(address) => handleAddressSelect(address)} 
+                  defaultAddress={formData.location} 
+                />
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 <div className="grid gap-3">

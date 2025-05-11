@@ -358,7 +358,7 @@ export default function AdminDashboard() {
                       {filteredProperties.map((property) => (
                       <TableRow key={property.id}>
                         <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
-                        <TableCell style={{ width: "15%" }}>{property.location}</TableCell>
+                        <TableCell className="w-[15%] max-w-[200px] truncate">{property.location}</TableCell>
                         <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
                         <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>
                         <TableCell style={{ width: "5%" }}>
@@ -503,7 +503,7 @@ export default function AdminDashboard() {
                       {filteredProperties.map((property) => (
                       <TableRow key={property.id}>
                         <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
-                        <TableCell style={{ width: "15%" }}>{property.location}</TableCell>
+                        <TableCell className="w-[15%] max-w-[200px] truncate">{property.location}</TableCell>
                         <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
                         <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>                        
                         <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>
@@ -629,7 +629,7 @@ export default function AdminDashboard() {
                       {filteredProperties.map((property) => (
                       <TableRow key={property.id}>
                         <TableCell style={{ width: "15%" }} className="font-medium">{property.title}</TableCell>
-                        <TableCell style={{ width: "15%" }}>{property.location}</TableCell>
+                        <TableCell className="w-[15%] max-w-[200px] truncate">{property.location}</TableCell>
                         <TableCell style={{ width: "5%", textAlign: "right", padding: 0 }}>{property.currency}</TableCell>
                         <TableCell style={{ width: "10%", textAlign: "left" }}>{property.price + formatPrice(property.type)}</TableCell>
                         <TableCell style={{ width: "5%" }}>{getStatusBadge(property.status)}</TableCell>

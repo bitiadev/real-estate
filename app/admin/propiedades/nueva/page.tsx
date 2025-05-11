@@ -23,6 +23,7 @@ import {
   // deletePropertyImageComplete, // No necesario directamente aquí al crear
 } from "@/lib/storage-service"
 import categories from "@/data/categories.json"
+import AddressAutocompleteGoogle from "@/components/autocomplete-input"
 
 interface UploadedImage {
   id?: number; // Opcional, si guardas referencia temporal en DB (aunque el nuevo enfoque evita esto)
@@ -59,7 +60,9 @@ export default function NuevaPropiedad() {
     contact_last_name: "",
     contact_phone: "",
     contact_location: "",
-    currency: "ARS"
+    currency: "ARS",
+    lat: 0,
+    lon: 0,
   })
   const [images, setImages] = useState<UploadedImage[]>([]) // Usaremos este estado para las imágenes subidas
 
@@ -146,6 +149,10 @@ export default function NuevaPropiedad() {
     );
   }
 
+  const handleAddressSelect = (address: any) => {
+    //console.log("Dirección seleccionada:", address)
+    setFormData((prev) => ({ ...prev, location: address.formattedAddress, lat: address.lat, lon: address.lng }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -303,7 +310,7 @@ export default function NuevaPropiedad() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-4">                
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-3">                
                 <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
                   <div className="flex flex-col gap-3 md:col-span-1">
                     <Label htmlFor="currency">Moneda</Label>
@@ -362,7 +369,7 @@ export default function NuevaPropiedad() {
                     </SelectContent>
                   </Select> 
                 </div>
-                <div className="grid gap-3">
+                {/* <div className="grid gap-3">
                   <Label htmlFor="location">Ubicación</Label>
                   <Input
                     id="location"
@@ -372,9 +379,9 @@ export default function NuevaPropiedad() {
                     value={formData.location}
                     onChange={handleInputChange}
                   />
-                </div>              
+                </div>      */}         
               </div>
-
+              <AddressAutocompleteGoogle onAddressSelect={handleAddressSelect} defaultAddress="" />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="grid gap-3">
                   <Label htmlFor="bedrooms">Dormitorios</Label>

@@ -105,6 +105,7 @@ export default function AdminSidebar() {
               </Link> */}
               <Link
                 href="/"
+                target="_blank"
                 className={`flex items-center px-3 py-2 rounded-md ${
                   pathname === "/"
                     ? "bg-gray-100 text-gray-900"
@@ -202,6 +203,7 @@ export default function AdminSidebar() {
             </Link> */}
             <Link
               href="/"
+              target="_blank"
               className={`flex items-center px-3 py-2 rounded-md ${
                 pathname === "/"
                   ? "bg-gray-100 text-gray-900"

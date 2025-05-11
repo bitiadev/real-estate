@@ -5,6 +5,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { Loader2 } from "lucide-react"
+import { de } from "date-fns/locale"
 
 // Definir interfaces para los tipos
 interface PlaceResult {
@@ -31,7 +32,7 @@ interface AddressDetails {
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: AddressDetails) => void,
-  value: string
+  defaultAddress: string
 }
 
 declare global {
@@ -41,9 +42,9 @@ declare global {
   }
 }
 
-export default function AddressAutocompleteGoogle({ onAddressSelect }: AddressAutocompleteProps, value: string) {
+export default function AddressAutocompleteGoogle({ onAddressSelect, defaultAddress }: AddressAutocompleteProps) {
   const [apiLoaded, setApiLoaded] = useState(false)
-  const [inputValue, setInputValue] = useState("")
+  const [inputValue, setInputValue] = useState(defaultAddress ||"")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -126,8 +127,8 @@ export default function AddressAutocompleteGoogle({ onAddressSelect }: AddressAu
       lng: place.geometry.location.lng(),
     }
 
+    setInputValue(place.formatted_address)
     onAddressSelect(addressDetails)
-
     setError(null)
   }
 
@@ -135,13 +136,13 @@ export default function AddressAutocompleteGoogle({ onAddressSelect }: AddressAu
     <div className="space-y-4">
       <div className="space-y-2">
         <label htmlFor="address" className="text-sm font-medium">
-          Ingrese una dirección en Argentina
+          Ubicación
         </label>
         <div className="relative">
           <Input
             id="address"
             ref={inputRef}
-            value={value}
+            value={inputValue}
             onChange={() => setInputValue(inputRef.current?.value || "")}
             placeholder="Buscar dirección..."
             className="w-full"
