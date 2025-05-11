@@ -61,8 +61,8 @@ export default function NuevaPropiedad() {
     contact_phone: "",
     contact_location: "",
     currency: "ARS",
-    lat: 0,
-    lon: 0,
+    lat: -38.3817,
+    lon: -60.2725,
   })
   const [images, setImages] = useState<UploadedImage[]>([]) // Usaremos este estado para las imágenes subidas
 
