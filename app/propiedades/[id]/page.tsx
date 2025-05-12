@@ -495,24 +495,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
                 <div className="space-y-4">
                   <h3 className="font-semibold">Comodidades</h3>
-                  <ul className="space-y-2">
+                  <ul className="space-y-2 grid grid-cols-2">
                     {property.features &&
                       Object.entries(property.features).map(([key, value]) => {
                         if (!value) return null
 
-                        const featureLabels: Record<string, string> = {
-                          pool: "Piscina",
-                          garden: "Jardín",
-                          garage: "Garage",
-                          security: "Seguridad 24hs",
-                          airConditioning: "Aire acondicionado",
-                          heating: "Calefacción",
-                        }
-
                         return (
                           <li key={key} className="flex items-center text-gray-700">
                             <Check className="h-5 w-5 text-green-500 mr-2" />
-                            <span>{featureLabels[key] || key}</span>
+                            <span>{key}</span>
                           </li>
                         )
                       })}
@@ -522,19 +513,10 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                       Object.entries(property.features)
                         .filter(([_, value]) => !value)
                         .map(([key, _]) => {
-                          const featureLabels: Record<string, string> = {
-                            pool: "Piscina",
-                            garden: "Jardín",
-                            garage: "Garage",
-                            security: "Seguridad 24hs",
-                            airConditioning: "Aire acondicionado",
-                            heating: "Calefacción",
-                          }
-
                           return (
                             <li key={key} className="flex items-center text-gray-400">
                               <XIcon className="h-5 w-5 text-gray-300 mr-2" />
-                              <span>{featureLabels[key] || key}</span>
+                              <span>{key}</span>
                             </li>
                           )
                         })}

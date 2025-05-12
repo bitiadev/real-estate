@@ -50,15 +50,15 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
   } */
 
   // Extraer características destacadas
-  const hasPool = property.features?.pool
-  const hasGarden = property.features?.garden
-  const hasGarage = property.features?.garage
+  const carac1 = property.features?.electricidad
+  const carac2 = property.features?.pavimento
+  const carac3 = property.features?.['gas natural']
 
   // Crear un array de características para mostrar como badges
   const highlightedFeatures = []
-  if (hasPool) highlightedFeatures.push("Piscina")
-  if (hasGarden) highlightedFeatures.push("Jardín")
-  if (hasGarage) highlightedFeatures.push("Garage")
+  if (carac1) highlightedFeatures.push("electricidad")
+  if (carac3) highlightedFeatures.push("gas natural")
+  if (carac2) highlightedFeatures.push("pavimento")
 
   return (
     <Link href={`/propiedades/${property.id}`}>
