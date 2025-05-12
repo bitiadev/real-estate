@@ -24,6 +24,7 @@ import {
 } from "@/lib/storage-service"
 import categories from "@/data/categories.json"
 import AddressAutocompleteGoogle from "@/components/autocomplete-input"
+import caracteristicas from "@/data/characteristics.json"
 
 interface UploadedImage {
   id?: number; // Opcional, si guardas referencia temporal en DB (aunque el nuevo enfoque evita esto)
@@ -46,14 +47,15 @@ export default function NuevaPropiedad() {
     bedrooms: "",
     bathrooms: "",
     area: "",
-    features: {
+    /* features: {
       pool: false,
       garden: false,
       garage: false,
       security: false,
       airConditioning: false,
       heating: false,
-    },
+    }, */
+    features: caracteristicas.reduce((acc: any, feature: string) => ({ ...acc, [feature]: false }), {}),
     visible: true,
     category: "",
     contact_name: "",
@@ -473,7 +475,24 @@ export default function NuevaPropiedad() {
               <div className="grid gap-3">
                 <Label>Características</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="flex items-center space-x-2">
+                  { caracteristicas.map(
+                    (caracteristica) => (
+                      <div key={caracteristica} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={caracteristica}
+                          checked={formData.features[caracteristica]}
+                          onCheckedChange={(checked) => handleCheckboxChange(caracteristica, checked as boolean)}
+                        />
+                        <label
+                          htmlFor={caracteristica}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {caracteristica}
+                        </label>
+                      </div>
+                    )
+                  ) }
+                  {/* <div className="flex items-center space-x-2">
                     <Checkbox
                       id="pool"
                       checked={formData.features.pool}
@@ -555,7 +574,7 @@ export default function NuevaPropiedad() {
                     >
                       Calefacción
                     </label>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

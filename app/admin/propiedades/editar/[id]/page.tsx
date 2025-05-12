@@ -25,6 +25,7 @@ import { supabase } from "@/lib/supabaseClient"
 import categories from "@/data/categories.json"
 import AddressAutocomplete from "@/components/adress-autocomplete"
 import AddressAutocompleteGoogle from "@/components/autocomplete-input"
+import caracteristicas from "@/data/characteristics.json"
 
 export default function EditarPropiedad({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -41,14 +42,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
     bedrooms: "",
     bathrooms: "",
     area: "",
-    features: {
-      pool: false,
-      garden: false,
-      garage: false,
-      security: false,
-      airConditioning: false,
-      heating: false,
-    },
+    features: caracteristicas.reduce((acc, feature) => ({ ...acc, [feature]: false }), {}),
     status: "activa",
     category: "",
     contact_name: "",
@@ -98,14 +92,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
           bedrooms: property.bedrooms.toString(),
           bathrooms: property.bathrooms.toString(),
           area: property.area.toString(),
-          features: {
-            pool: property.features?.pool || false,
-            garden: property.features?.garden || false,
-            garage: property.features?.garage || false,
-            security: property.features?.security || false,
-            airConditioning: property.features?.airConditioning || false,
-            heating: property.features?.heating || false,
-          },
+          features: property.features,
           status: property.status,
           category: property.category,
           contact_name: property.contact_name,
@@ -533,7 +520,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
 
               <div className="grid gap-3">
                 <Label>Características</Label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {Object.keys(formData.features).map((feature) => (
                     <div key={feature} className="flex items-center space-x-2">
                       <Checkbox
