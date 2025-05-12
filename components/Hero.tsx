@@ -144,7 +144,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
                 </div>
                 <div>
                   <Button className="w-full" asChild>
-                    <Link href={`/propiedades?city=${city}&category=${category}&operation=${operation}`}>
+                    <Link href={`/propiedades?location=${city}&category=${category}&type=${operation}`}>
                       <Search className="mr-2 h-4 w-4" />
                       Buscar
                     </Link>
