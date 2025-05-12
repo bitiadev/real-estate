@@ -92,7 +92,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
           bedrooms: property.bedrooms.toString(),
           bathrooms: property.bathrooms.toString(),
           area: property.area.toString(),
-          features: property.features,
+          features: property.features || {},
           status: property.status,
           category: property.category,
           contact_name: property.contact_name,
@@ -521,7 +521,7 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
               <div className="grid gap-3">
                 <Label>Características</Label>
                 <div className="grid grid-cols-3 gap-2">
-                  {Object.keys(formData.features).map((feature) => (
+                 {/*  {formData.features && Object.keys(formData.features).map((feature) => (
                     <div key={feature} className="flex items-center space-x-2">
                       <Checkbox
                         id={feature}
@@ -532,7 +532,21 @@ export default function EditarPropiedad({ params }: { params: Promise<{ id: stri
                       />
                       <Label htmlFor={feature}>{feature}</Label>
                     </div>
-                  ))}
+                  ))} */
+                  caracteristicas.map(
+                    (feature) => (
+                      <div key={feature} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={feature}
+                        checked={formData.features[feature as keyof typeof formData.features]}
+                        onCheckedChange={(checked) =>
+                          handleCheckboxChange(feature, checked as boolean)
+                        }
+                      />
+                      <Label htmlFor={feature}>{feature}</Label>
+                    </div> 
+                    )
+                  )}                
                 </div>
               </div>
               <div className="grid gap-3">

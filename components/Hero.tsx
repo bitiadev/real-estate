@@ -21,6 +21,9 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
   // Estado para el índice de la imagen actual y el tipo de dispositivo
   const [currentIndex, setCurrentIndex] = useState(0)
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('mobile')
+  const [city, setCity] = useState('all')
+  const [category, setCategory] = useState('all')
+  const [operation, setOperation] = useState('all')
 
   // Efecto para detectar el tipo de dispositivo basado en el ancho de la ventana
   useEffect(() => {
@@ -94,7 +97,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4">
               <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div className="md:col-span-2">
-                  <Select>
+                  <Select onValueChange={(value) => setCity(value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Ciudad"/>
                     </SelectTrigger>
@@ -111,7 +114,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
                   </Select>
                 </div>
                 <div className="md:col-span-2">
-                  <Select>
+                  <Select onValueChange={(value) => setCategory(value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Tipo"/>
                     </SelectTrigger>
@@ -128,7 +131,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
                   </Select>
                 </div>
                 <div>
-                  <Select>
+                  <Select onValueChange={(value) => setOperation(value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Operacion" />
                     </SelectTrigger>
@@ -141,7 +144,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
                 </div>
                 <div>
                   <Button className="w-full" asChild>
-                    <Link href="/propiedades">
+                    <Link href={`/propiedades?city=${city}&category=${category}&operation=${operation}`}>
                       <Search className="mr-2 h-4 w-4" />
                       Buscar
                     </Link>
