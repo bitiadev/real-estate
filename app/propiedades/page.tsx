@@ -141,7 +141,7 @@ export default function PropertiesPage() {
         return {
           ...prev,
           [parent]: {
-            ...(prev[parent as keyof typeof prev] as Record<string, boolean>),
+            ...(prev[parent as keyof typeof prev] as unknown as Record<string, boolean>),
             [child]: value,
           },
         }

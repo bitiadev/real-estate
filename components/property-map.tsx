@@ -144,7 +144,7 @@ export default function PropertyMap({ properties, selectedPropertyId, onMarkerCl
     document.head.appendChild(script)
 
     return () => {
-      window.initMap = null
+      window.initMap = () => {}
       if (script.parentNode) {
         script.parentNode.removeChild(script)
       }
