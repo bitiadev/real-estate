@@ -371,7 +371,7 @@ export default function NuevaPropiedad() {
                     </SelectContent>
                   </Select> 
                 </div>
-                <div className="grid gap-3">
+              {/*   <div className="grid gap-3">
                   <Label htmlFor="location">Ubicación</Label>
                   <Input
                     id="location"
@@ -381,7 +381,7 @@ export default function NuevaPropiedad() {
                     value={formData.location}
                     onChange={handleInputChange}
                   />
-                </div>              
+                </div>               */}
               </div>
               <AddressAutocompleteGoogle onAddressSelect={handleAddressSelect} defaultAddress="" />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
