@@ -52,11 +52,11 @@ export default function PageMap() {
 
   return (
     <main className="flex flex-col h-screen">
-      <header className="bg-white p-4 shadow-md">
+      <header className="bg-white p-4 shadow-md text-center">
         <h1 className="text-2xl font-bold">Mapa de Propiedades</h1>
       </header>
 
-      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden h-full">
         <div className="w-full md:w-1/4 p-4 overflow-y-auto hidden md:block">
           <PropertyList
             properties={properties}
@@ -65,7 +65,7 @@ export default function PageMap() {
           />
         </div>
 
-        <div className="w-full md:w-3/4 h-dvh md:h-auto">
+        <div className="w-full md:w-3/4 h-full">
           <PropertyMap
             properties={properties}
             selectedPropertyId={selectedProperty ?? 0}

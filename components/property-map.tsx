@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { Loader2 } from "lucide-react"
 import { Property } from "@/lib/property-service"
+import { bg } from "date-fns/locale"
 
 interface PropertyMapProps {
   properties: Property[]
@@ -31,20 +32,20 @@ export default function PropertyMap({ properties, selectedPropertyId, onMarkerCl
 
     try {
       // Calcular el centro del mapa basado en las propiedades
-      let centerLat = -34.6037
-      let centerLng = -58.3816
+      let centerLat = -38.3769
+      let centerLng = -60.2757
 
-      if (properties.length > 0) {
+      /* if (properties.length > 0) {
         const totalLat = properties.reduce((sum, prop) => sum + prop.lat, 0)
         const totalLng = properties.reduce((sum, prop) => sum + prop.lon, 0)
         centerLat = totalLat / properties.length
         centerLng = totalLng / properties.length
-      }
+      } */
 
       // Crear el mapa
       mapRef.current = new window.google.maps.Map(mapContainerRef.current, {
         center: { lat: centerLat, lng: centerLng },
-        zoom: 12,
+        zoom: 14,
         mapTypeControl: true,
         streetViewControl: true,
         fullscreenControl: true,
@@ -61,6 +62,24 @@ export default function PropertyMap({ properties, selectedPropertyId, onMarkerCl
           map: mapRef.current,
           title: property.title,
           animation: window.google.maps.Animation.DROP,
+          icon: {
+            url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+              <svg xmlns="http://www.w3.org/2000/svg" width="100" height="30">
+                <rect x="0" y="0" width="100" height="30" rx="5" ry="5" fill="white" stroke="#2563eb" stroke-width="2"/>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" font-family="Arial" font-weight="bold" fill="#000">
+                  ${property.currency} ${property.price.toLocaleString()}
+                </text>
+              </svg>
+            `)}`,
+            scaledSize: new window.google.maps.Size(100, 30),
+            labelOrigin: new window.google.maps.Point(50, 15),
+          },
+          /* label: {
+            text: `${property.currency}${property.price.toLocaleString()}`,
+            fontWeight: "bold",
+            color: "#000",
+            fontSize: "14px",
+          }, */
         })
 
         // Guardar referencia al marcador
