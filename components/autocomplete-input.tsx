@@ -108,7 +108,7 @@ export default function AddressAutocompleteGoogle({ onAddressSelect, defaultAddr
       types: ["address"],
     })
 
-    autocompleteRef.current.addListener("place_changed", handlePlaceSelect)
+    autocompleteRef.current?.addListener("place_changed", handlePlaceSelect)
   }
 
   const handlePlaceSelect = () => {
@@ -118,7 +118,7 @@ export default function AddressAutocompleteGoogle({ onAddressSelect, defaultAddr
 
     if (!place.geometry) {
       setError("No se encontraron detalles para esta dirección")
-      return
+      /* return */
     }
 
     const addressDetails: AddressDetails = {
@@ -146,7 +146,7 @@ export default function AddressAutocompleteGoogle({ onAddressSelect, defaultAddr
             onChange={() => setInputValue(inputRef.current?.value || "")}
             placeholder="Buscar dirección..."
             className="w-full"
-            disabled={loading || !!error}
+            disabled={loading}
           />
           {loading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">

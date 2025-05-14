@@ -1,10 +1,11 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Bed, Bath, Square, MapPin } from "lucide-react";
+import { Bed, Bath, Square, MapPin, X, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { Property } from "@/lib/property-service";
 import Link from "next/link";
+import { Alert, AlertDescription } from "./ui/alert";
 
 interface PropertyListProps {
   properties: Property[];
@@ -80,6 +81,12 @@ export default function PropertyList({
                     <span className="text-sm">{property.area} m²</span>
                   </div>
                 </div> */}
+                {(!property.lat || !property.lon) && <Alert variant="destructive" className="p-1">
+                  <AlertDescription className="flex gap-2 items-center">
+                    <AlertCircle />
+                    <span>No mapeado</span>
+                  </AlertDescription>
+                </Alert>}
               </div>
             </CardContent>
           </Card>
