@@ -33,6 +33,7 @@ export default function PropertiesPage() {
   const [sortOption, setSortOption] = useState("newest")
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
+  const [isClearingFilters, setIsClearingFilters] = useState(false)
 
   // Estado para los filtros
   const [filters, setFilters] = useState({
@@ -266,7 +267,7 @@ export default function PropertiesPage() {
       maxArea: filters.maxArea,
     })
     setSortOption("newest")
-    handleApplyFilters()
+    setIsClearingFilters(true)
   } 
 
   // Aplicar filtros y actualizar URL
@@ -275,6 +276,15 @@ export default function PropertiesPage() {
     updateUrlWithFilters()
     setShowMobileFilters(false)
   }
+
+  useEffect(() => {
+    if (isClearingFilters) {
+      applyFilters()
+      updateUrlWithFilters()
+      setShowMobileFilters(false)
+      setIsClearingFilters(false)
+    }
+  }, [filters])
 
   return (
     <div className="px-4 md:px-8 py-8 md:py-12">
