@@ -36,22 +36,15 @@ export default function PropertiesPage() {
 
   // Estado para los filtros
   const [filters, setFilters] = useState({
-    location: "",
+    location: "all",
     type: "all",
+    category: "all",
     minPrice: 0,
     maxPrice: 500000,
     bedrooms: "any",
     bathrooms: "any",
     minArea: 0,
     maxArea: 500,
-    /* features: {
-      pool: false,
-      garden: false,
-      garage: false,
-      security: false,
-      airConditioning: false,
-      heating: false,
-    }, */
   })
 
   // Cargar propiedades al montar el componente
@@ -92,8 +85,9 @@ export default function PropertiesPage() {
 
   // Cargar filtros desde URL
   const loadFiltersFromUrl = useCallback(() => {
-    const location = searchParams.get("location") || ""
+    const location = searchParams.get("location") || "all" 
     const type = searchParams.get("type") || "all"
+    const category = searchParams.get("category") || "all"
     const minPrice = Number(searchParams.get("minPrice") || 0)
     const maxPrice = Number(searchParams.get("maxPrice") || filters.maxPrice)
     const bedrooms = searchParams.get("bedrooms") || "any"
@@ -101,31 +95,16 @@ export default function PropertiesPage() {
     const minArea = Number(searchParams.get("minArea") || 0)
     const maxArea = Number(searchParams.get("maxArea") || filters.maxArea)
 
-    /* // Características
-    const pool = searchParams.get("pool") === "true"
-    const garden = searchParams.get("garden") === "true"
-    const garage = searchParams.get("garage") === "true"
-    const security = searchParams.get("security") === "true"
-    const airConditioning = searchParams.get("airConditioning") === "true"
-    const heating = searchParams.get("heating") === "true" */
-
     setFilters({
       location,
       type,
+      category,
       minPrice,
       maxPrice,
       bedrooms,
       bathrooms,
       minArea,
       maxArea,
-     /*  features: {
-        pool,
-        garden,
-        garage,
-        security,
-        airConditioning,
-        heating,
-      }, */
     })
 
     // Ordenamiento
@@ -151,11 +130,12 @@ export default function PropertiesPage() {
   }
 
   // Actualizar URL con filtros
-  const updateUrlWithFilters = useCallback(() => {
+  const updateUrlWithFilters = () => {
     const params = new URLSearchParams()
 
-    if (filters.location) params.set("location", filters.location)
+    if (filters.location !== "all") params.set("location", filters.location)
     if (filters.type !== "all") params.set("type", filters.type)
+    if (filters.category !== "all") params.set("category", filters.category)
     if (filters.minPrice > 0) params.set("minPrice", filters.minPrice.toString())
     if (filters.maxPrice < 500000) params.set("maxPrice", filters.maxPrice.toString())
     if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms)
@@ -163,32 +143,28 @@ export default function PropertiesPage() {
     if (filters.minArea > 0) params.set("minArea", filters.minArea.toString())
     if (filters.maxArea < 500) params.set("maxArea", filters.maxArea.toString())
 
-    /* // Características
-    if (filters.features.pool) params.set("pool", "true")
-    if (filters.features.garden) params.set("garden", "true")
-    if (filters.features.garage) params.set("garage", "true")
-    if (filters.features.security) params.set("security", "true")
-    if (filters.features.airConditioning) params.set("airConditioning", "true")
-    if (filters.features.heating) params.set("heating", "true") */
-
     // Ordenamiento
     if (sortOption !== "newest") params.set("sort", sortOption)
 
     router.push(`/propiedades?${params.toString()}`)
-  }, [filters, sortOption, router])
+  }
 
   // Aplicar filtros cuando cambian
-  const applyFilters = useCallback(() => {
+  const applyFilters = () => {
     let filtered = [...properties]
 
     // Filtro por ubicación
-    if (filters.location) {
+    if (filters.location !== "all") {
       filtered = filtered.filter((property) => property.location.toLowerCase().includes(filters.location.toLowerCase()))
     }
 
     // Filtro por tipo
     if (filters.type !== "all") {
       filtered = filtered.filter((property) => property.type === filters.type)
+    }
+
+    if (filters.category !== "all") {
+      filtered = filtered.filter((property) => property.category === filters.category)
     }
 
     // Filtro por precio
@@ -233,8 +209,9 @@ export default function PropertiesPage() {
 
     // Contar filtros activos
     let count = 0
-    if (filters.location) count++
+    if (filters.location !== "all") count++
     if (filters.type !== "all") count++
+    if (filters.category !== "all") count++
     if (filters.bedrooms !== "any") count++
     if (filters.bathrooms !== "any") count++
     if (filters.minPrice > 0) count++
@@ -246,7 +223,7 @@ export default function PropertiesPage() {
     }) */
 
     setActiveFiltersCount(count)
-  }, [filters, properties, sortOption])
+  }
 
   // Ordenar propiedades
   const sortProperties = (propertiesList: Property[], option: string) => {
@@ -270,34 +247,27 @@ export default function PropertiesPage() {
     }
   }
 
-  // Aplicar filtros cuando cambian
+/*   // Aplicar filtros cuando cambian
   useEffect(() => {
     applyFilters()
-  }, [applyFilters])
+  }, [applyFilters]) */
 
   // Limpiar todos los filtros
   const clearAllFilters = () => {
     setFilters({
-      location: "",
+      location: "all",
       type: "all",
+      category: "all",
       minPrice: 0,
       maxPrice: filters.maxPrice,
       bedrooms: "any",
       bathrooms: "any",
       minArea: 0,
       maxArea: filters.maxArea,
-      /* features: {
-        pool: false,
-        garden: false,
-        garage: false,
-        security: false,
-        airConditioning: false,
-        heating: false,
-      }, */
     })
     setSortOption("newest")
-    router.push("/propiedades")
-  }
+    handleApplyFilters()
+  } 
 
   // Aplicar filtros y actualizar URL
   const handleApplyFilters = () => {
@@ -319,10 +289,7 @@ export default function PropertiesPage() {
           <Input
             placeholder="Buscar..."
             className="pl-10"
-            /* value={filters.location || "" }
-            onChange={(e) => handleFilterChange("location", e.target.value)} */
             onChange={(e) => {
-              
                 const searchTerm = e.target.value.toLowerCase()
                 setFilteredProperties(
                   properties.filter((property) =>
@@ -330,7 +297,6 @@ export default function PropertiesPage() {
                   ),
                 )
             }}
-            onKeyDown={(e) => e.key === "Enter" && handleApplyFilters()}
           />
         </div>
 
@@ -541,7 +507,6 @@ export default function PropertiesPage() {
             value={sortOption}
             onValueChange={(value) => {
               setSortOption(value)
-              setTimeout(() => handleApplyFilters(), 100)
             }}
           >
             <SelectTrigger className="w-[180px]">
@@ -570,7 +535,6 @@ export default function PropertiesPage() {
                 className="h-3 w-3 ml-1 cursor-pointer"
                 onClick={() => {
                   handleFilterChange("type", "all")
-                  setTimeout(() => handleApplyFilters(), 100)
                 }}
               />
             </Badge>
@@ -583,7 +547,6 @@ export default function PropertiesPage() {
                 className="h-3 w-3 ml-1 cursor-pointer"
                 onClick={() => {
                   handleFilterChange("bedrooms", "any")
-                  setTimeout(() => handleApplyFilters(), 100)
                 }}
               />
             </Badge>
@@ -596,7 +559,6 @@ export default function PropertiesPage() {
                 className="h-3 w-3 ml-1 cursor-pointer"
                 onClick={() => {
                   handleFilterChange("bathrooms", "any")
-                  setTimeout(() => handleApplyFilters(), 100)
                 }}
               />
             </Badge>
@@ -628,11 +590,7 @@ export default function PropertiesPage() {
               )
             })} */}
 
-          {activeFiltersCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={clearAllFilters} className="h-6">
-              Limpiar todos
-            </Button>
-          )}
+         
         </div>
       )}
 
@@ -657,7 +615,6 @@ export default function PropertiesPage() {
                     value={filters.type}
                     onValueChange={(value) => {
                       handleFilterChange("type", value)
-                      setTimeout(() => handleApplyFilters(), 100)
                     }}
                   >
                     <SelectTrigger>
@@ -740,7 +697,6 @@ export default function PropertiesPage() {
                         value={filters.bedrooms}
                         onValueChange={(value) => {
                           handleFilterChange("bedrooms", value)
-                          setTimeout(() => handleApplyFilters(), 100)
                         }}
                       >
                         <SelectTrigger>
@@ -762,7 +718,6 @@ export default function PropertiesPage() {
                         value={filters.bathrooms}
                         onValueChange={(value) => {
                           handleFilterChange("bathrooms", value)
-                          setTimeout(() => handleApplyFilters(), 100)
                         }}
                       >
                         <SelectTrigger>
