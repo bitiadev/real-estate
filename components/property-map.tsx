@@ -141,12 +141,20 @@ export default function PropertyMap({
       return;
     }
 
-    window.initMap = initializeMap;
+/*     window.initMap = initializeMap; */
 
     const script = document.createElement("script");
     script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&callback=initMap`;
     script.async = true;
     script.defer = true;
+
+    script.onload = () => {
+      if (window.google && window.google.maps) {
+        initializeMap();
+      } else {
+        setError("Google Maps no se cargó correctamente");
+      }
+    };
 
     script.onerror = () => {
       setError("Error al cargar la API de Google Maps");
