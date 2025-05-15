@@ -5,8 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import {
   Sheet,
@@ -23,6 +22,8 @@ import { Search, Loader2, Building, Filter, X, SlidersHorizontal, Check } from "
 import { getAllProperties } from "@/lib/property-service"
 import type { Property } from "@/lib/property-service"
 import { Badge } from "@/components/ui/badge"
+import cities from '@/data/cities.json' 
+import categories from '@/data/categories.json' 
 
 export default function PropertiesPage() {
   const router = useRouter()
@@ -41,11 +42,11 @@ export default function PropertiesPage() {
     type: "all",
     category: "all",
     minPrice: 0,
-    maxPrice: 500000,
+    maxPrice: 5000000,
     bedrooms: "any",
     bathrooms: "any",
     minArea: 0,
-    maxArea: 500,
+    maxArea: 5000,
   })
 
   // Cargar propiedades al montar el componente
@@ -83,6 +84,29 @@ export default function PropertiesPage() {
 
     loadProperties()
   }, [])
+
+  // Aplicar filtros al cargar la página 
+useEffect(() => {
+  // Solo aplicar si hay propiedades cargadas y la URL tiene algún filtro distinto de los valores por defecto
+  if (properties.length > 0) {
+    const hasInitialFilters =
+      (filters.location && filters.location !== "all") ||
+      (filters.type && filters.type !== "all") ||
+      (filters.category && filters.category !== "all") ||
+      filters.minPrice > 0 ||
+      filters.maxPrice < 5000000 ||
+      filters.bedrooms !== "any" ||
+      filters.bathrooms !== "any" ||
+      filters.minArea > 0 ||
+      filters.maxArea < 5000
+
+    if (hasInitialFilters) {
+      applyFilters()
+    }
+  }
+  // Solo debe ejecutarse cuando cambian las propiedades o los filtros iniciales  
+}, [properties])
+
 
   // Cargar filtros desde URL
   const loadFiltersFromUrl = useCallback(() => {
@@ -138,11 +162,11 @@ export default function PropertiesPage() {
     if (filters.type !== "all") params.set("type", filters.type)
     if (filters.category !== "all") params.set("category", filters.category)
     if (filters.minPrice > 0) params.set("minPrice", filters.minPrice.toString())
-    if (filters.maxPrice < 500000) params.set("maxPrice", filters.maxPrice.toString())
+    if (filters.maxPrice < 5000000) params.set("maxPrice", filters.maxPrice.toString())
     if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms)
     if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms)
     if (filters.minArea > 0) params.set("minArea", filters.minArea.toString())
-    if (filters.maxArea < 500) params.set("maxArea", filters.maxArea.toString())
+    if (filters.maxArea < 5000) params.set("maxArea", filters.maxArea.toString())
 
     // Ordenamiento
     if (sortOption !== "newest") params.set("sort", sortOption)
@@ -216,9 +240,9 @@ export default function PropertiesPage() {
     if (filters.bedrooms !== "any") count++
     if (filters.bathrooms !== "any") count++
     if (filters.minPrice > 0) count++
-    if (filters.maxPrice < 500000) count++
+    if (filters.maxPrice < 5000000) count++
     if (filters.minArea > 0) count++
-    if (filters.maxArea < 500) count++
+    if (filters.maxArea < 5000) count++
     /* Object.values(filters.features).forEach((value) => {
       if (value) count++
     }) */
@@ -344,55 +368,101 @@ export default function PropertiesPage() {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+
+              <div className="py-4 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">Ciudad</h3>
+                <Select value={filters.location} onValueChange={(value => handleFilterChange("location", value))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ciudad"/>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todas</SelectItem>
+                    {
+                      cities.map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
+                </div>
+              </div>
+
+              <div className="py-4 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">Tipo</h3>
+                  <Select value={filters.category} onValueChange={(value => handleFilterChange("category", value))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos</SelectItem>
+                      {
+                        categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <div className="space-y-2">
                   <h3 className="text-sm font-medium">Precio</h3>
                   <div className="px-2">
-                    <Slider
-                      value={[filters.minPrice, filters.maxPrice]}
-                      max={filters.maxPrice}
-                      step={1000}
-                      onValueChange={(value) => {
-                        handleFilterChange("minPrice", value[0])
-                        handleFilterChange("maxPrice", value[1])
-                      }}
-                      className="mb-2"
-                    />
-                    <div className="flex justify-between text-sm text-gray-500">
-                      <span>
-                        {new Intl.NumberFormat("es-AR", {
-                          style: "currency",
-                          currency: "ARS",
-                          maximumFractionDigits: 0,
-                        }).format(filters.minPrice)}
-                      </span>
-                      <span>
-                        {new Intl.NumberFormat("es-AR", {
-                          style: "currency",
-                          currency: "ARS",
-                          maximumFractionDigits: 0,
-                        }).format(filters.maxPrice)}
-                      </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label htmlFor="minPrice">Mínimo</Label>
+                        <Input
+                          id="minPrice"
+                          type="number"
+                          placeholder="0"                          
+                          value={filters.minPrice}
+                          onChange={(e) => handleFilterChange("minPrice", Number(e.target.value))}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="maxPrice">Máximo</Label>
+                        <Input
+                          id="maxPrice"
+                          type="number"
+                          placeholder={filters.maxPrice.toString()}
+                          value={filters.maxPrice}
+                          onChange={(e) => handleFilterChange("maxPrice", Number(e.target.value))}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium">Superficie (m²)</h3>
                   <div className="px-2">
-                    <Slider
-                      value={[filters.minArea, filters.maxArea]}
-                      max={filters.maxArea}
-                      step={5}
-                      onValueChange={(value) => {
-                        handleFilterChange("minArea", value[0])
-                        handleFilterChange("maxArea", value[1])
-                      }}
-                      className="mb-2"
-                    />
-                    <div className="flex justify-between text-sm text-gray-500">
-                      <span>{filters.minArea} m²</span>
-                      <span>{filters.maxArea} m²</span>
+                    <h3 className="text-sm font-medium">Superficie</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="minArea">Mínimo</Label>
+                        <Input
+                          id="minArea"
+                          type="number"
+                          placeholder="0"
+                          value={filters.minArea}
+                          onChange={(e) => handleFilterChange("minArea", Number(e.target.value))}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="maxArea">Máximo</Label>
+                        <Input
+                          id="maxArea"
+                          type="number"
+                          placeholder={filters.maxArea.toString()}
+                          value={filters.maxArea}
+                          onChange={(e) => handleFilterChange("maxArea", Number(e.target.value))}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -600,13 +670,12 @@ export default function PropertiesPage() {
               )
             })} */}
 
-         
         </div>
       )}
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* Filtros de escritorio */}
-        <div className="hidden md:block w-64 flex-shrink-0">
+        <div className="hidden md:block w-72 flex-shrink-0">
           <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-semibold">Filtros</h2>
@@ -617,7 +686,7 @@ export default function PropertiesPage() {
               )}
             </div>
 
-            <Accordion type="multiple" defaultValue={["type", "price", "rooms", "features"]} className="space-y-2">
+            <Accordion type="multiple" defaultValue={["type", "location", "price", "rooms"/* , "features" */]} className="space-y-2">
               <AccordionItem value="type" className="border-b">
                 <AccordionTrigger className="py-2 text-sm font-medium">Tipo de Operacion</AccordionTrigger>
                 <AccordionContent>
@@ -639,36 +708,73 @@ export default function PropertiesPage() {
                 </AccordionContent>
               </AccordionItem>
 
+              <AccordionItem value="location" className="border-b">
+                <AccordionTrigger className="py-2 text-sm font-medium">Localidad</AccordionTrigger>
+                <AccordionContent>
+                  <Select value={filters.location} onValueChange={(value => handleFilterChange("location", value))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Ciudad"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todas</SelectItem>
+                      {
+                        cities.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="category" className="border-b">
+                <AccordionTrigger className="py-2 text-sm font-medium">Tipo</AccordionTrigger>
+                <AccordionContent>
+                  <Select value={filters.category} onValueChange={(value => handleFilterChange("category", value))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos</SelectItem>
+                      {
+                        categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
+                </AccordionContent>
+              </AccordionItem>
+
               <AccordionItem value="price" className="border-b">
                 <AccordionTrigger className="py-2 text-sm font-medium">Precio</AccordionTrigger>
                 <AccordionContent>
                   <div className="px-2 py-2">
-                    <Slider
-                      value={[filters.minPrice, filters.maxPrice]}
-                      max={filters.maxPrice}
-                      step={1000}
-                      onValueChange={(value) => {
-                        handleFilterChange("minPrice", value[0])
-                        handleFilterChange("maxPrice", value[1])
-                      }}
-                      onValueCommit={() => handleApplyFilters()}
-                      className="mb-2"
-                    />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>
-                        {new Intl.NumberFormat("es-AR", {
-                          style: "currency",
-                          currency: "ARS",
-                          maximumFractionDigits: 0,
-                        }).format(filters.minPrice)}
-                      </span>
-                      <span>
-                        {new Intl.NumberFormat("es-AR", {
-                          style: "currency",
-                          currency: "ARS",
-                          maximumFractionDigits: 0,
-                        }).format(filters.maxPrice)}
-                      </span>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="minPrice">Mínimo</Label>
+                        <Input
+                          id="minPrice"
+                          type="number"
+                          placeholder="0"
+                          value={filters.minPrice}
+                          onChange={(e) => handleFilterChange("minPrice", Number(e.target.value))}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="maxPrice">Máximo</Label>
+                        <Input
+                          id="maxPrice"
+                          type="number"
+                          placeholder={filters.maxPrice.toString()}
+                          value={filters.maxPrice}
+                          onChange={(e) => handleFilterChange("maxPrice", Number(e.target.value))}
+                        />
+                      </div>
                     </div>
                   </div>
                 </AccordionContent>
@@ -678,21 +784,28 @@ export default function PropertiesPage() {
                 <AccordionTrigger className="py-2 text-sm font-medium">Superficie</AccordionTrigger>
                 <AccordionContent>
                   <div className="px-2">
-                    <Slider
-                      value={[filters.minArea, filters.maxArea]}
-                      max={filters.maxArea}
-                      step={5}
-                      onValueChange={(value) => {
-                        handleFilterChange("minArea", value[0])
-                        handleFilterChange("maxArea", value[1])
-                      }}
-                      onValueCommit={() => handleApplyFilters()}
-                      className="mb-2"
-                    />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{filters.minArea} m²</span>
-                      <span>{filters.maxArea} m²</span>
-                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="minArea">Mínimo</Label>
+                        <Input
+                          id="minArea"
+                          type="number"
+                          placeholder="0"
+                          value={filters.minArea}
+                          onChange={(e) => handleFilterChange("minArea", Number(e.target.value))}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="maxArea">Máximo</Label>
+                        <Input
+                          id="maxArea"
+                          type="number"
+                          placeholder={filters.maxArea.toString()}
+                          value={filters.maxArea}
+                          onChange={(e) => handleFilterChange("maxArea", Number(e.target.value))}
+                        />
+                      </div>
+                  </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>

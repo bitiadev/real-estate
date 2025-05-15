@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Building, Home, LogOut, Menu, Settings, User, X, UserPlus, Chrome, Globe } from "lucide-react"
+import { Building, Home, LogOut, Menu, Settings, User, X, UserPlus, Chrome, Globe, MapPinHouse } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useToast } from "@/hooks/use-toast"
 
@@ -79,6 +79,7 @@ export default function AdminSidebar() {
                 <User className="h-5 w-5 mr-2" />
                 Usuarios
               </Link>
+              
               <Link
                 href="/admin/leads"
                 className={`flex items-center px-3 py-2 rounded-md ${
@@ -90,6 +91,19 @@ export default function AdminSidebar() {
               >
                 <UserPlus className="h-5 w-5 mr-2" />
                 Leads
+              </Link>
+              
+              <Link
+                href="/admin/propiedades/map"
+                className={`flex items-center px-3 py-2 rounded-md ${
+                  isActive("/admin/propiedades/map")
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <MapPinHouse className="h-5 w-5 mr-2" />
+                Mapa
               </Link>
               {/* <Link
                 href="/admin/configuracion"
@@ -142,7 +156,7 @@ export default function AdminSidebar() {
       <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:bg-white">
         <div className="flex items-center h-16 md:h-24 px-6 border-b">
           <Building className="h-6 w-6 text-gray-700" />
-          <span className="ml-2 font-semibold">Inmobiliaria Admin</span>
+          <span className="ml-2 font-semibold">Administrador</span>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
           <nav className="space-y-1">
@@ -190,6 +204,18 @@ export default function AdminSidebar() {
               <UserPlus className="h-5 w-5 mr-2" />
               Leads
             </Link>
+            <Link
+                href="/admin/propiedades/map"
+                className={`flex items-center px-3 py-2 rounded-md ${
+                  isActive("/admin/propiedades/map")
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <MapPinHouse className="h-5 w-5 mr-2" />
+                Mapa
+              </Link>
             {/* <Link
               href="/admin/configuracion"
               className={`flex items-center px-3 py-2 rounded-md ${
