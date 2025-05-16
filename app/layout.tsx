@@ -35,14 +35,14 @@ export default function RootLayout({
         {/* <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange> */}
         
         {/* Banner de lanzamiento */}
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 text-gray-900 text-center">
+         {/*  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 text-gray-900 text-center">
             <img src="/smallLogo3.png" alt="Yitani Inmobiliaria" className="w-24 h-24 mb-6" />
             <h1 className="text-3xl font-bold mb-4">¡Próximamente!</h1>
             <p className="text-lg max-w-md">
               Muy pronto podrás buscar las mejores propiedades en <span className="font-semibold">Yitani Inmobiliaria</span>.<br />
               Estamos por lanzar oficialmente nuestra web.
             </p>
-          </div>  
+          </div>   */}
         {/* Fin del banner de lanzamiento */}
 
           <AuthProvider>
