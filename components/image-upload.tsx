@@ -22,7 +22,7 @@ export default function ImageUpload({
   onRemoveImage,
   onSetMainImage,
   images = [],
-  maxImages = 10,
+  maxImages = 65,
   className = "",
 }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false)
