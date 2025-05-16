@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Loader2 } from "lucide-react";
 import { Property } from "@/lib/property-service";
+import { bg } from "date-fns/locale";
 
 interface PropertyMapProps {
   properties: Property[];
@@ -13,6 +14,7 @@ interface PropertyMapProps {
 declare global {
   interface Window {
     google: any;
+    initMap: () => void;
   }
 }
 
@@ -23,20 +25,29 @@ export default function PropertyMap({
 }: PropertyMapProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  //const mapRef = useRef<google.maps.Map | null>(null);
   const mapRef = useRef<any | null>(null);
+  //const markersRef = useRef<{ [key: string]: google.maps.Marker }>({});
   const markersRef = useRef<{ [key: string]: any }>({});
+  //const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const infoWindowRef = useRef<any | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const googleMapsScriptLoaded = useRef(false); // Controlar si el script ya se cargó
 
   // Inicializar el mapa
   const initializeMap = useCallback(() => {
-    if (!mapContainerRef.current || !window.google) return;
+    if (!mapContainerRef.current) return;
 
     try {
       // Calcular el centro del mapa basado en las propiedades
       let centerLat = -38.3769;
       let centerLng = -60.2757;
+
+      /* if (properties.length > 0) {
+        const totalLat = properties.reduce((sum, prop) => sum + prop.lat, 0)
+        const totalLng = properties.reduce((sum, prop) => sum + prop.lon, 0)
+        centerLat = totalLat / properties.length
+        centerLng = totalLng / properties.length
+      } */
 
       // Crear el mapa
       mapRef.current = new window.google.maps.Map(mapContainerRef.current, {
@@ -54,6 +65,7 @@ export default function PropertyMap({
       // Añadir marcadores para cada propiedad
       properties.forEach((property) => {
         if (property.lat && property.lon) {
+          console.log(property);
           const marker = new window.google.maps.Marker({
             position: { lat: property.lat, lng: property.lon },
             map: mapRef.current,
@@ -61,16 +73,22 @@ export default function PropertyMap({
             animation: window.google.maps.Animation.DROP,
             icon: {
               url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-                  <svg xmlns="http://www.w3.org/2000/svg" width="100" height="30">
-                    <rect x="0" y="0" width="100" height="30" rx="5" ry="5" fill="white" stroke="#2563eb" stroke-width="2"/>
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" font-family="Arial" font-weight="bold" fill="#000">
-                      ${property.currency} ${property.price.toLocaleString()}
-                    </text>
-                  </svg>
-                `)}`,
+              <svg xmlns="http://www.w3.org/2000/svg" width="100" height="30">
+                <rect x="0" y="0" width="100" height="30" rx="5" ry="5" fill="white" stroke="#2563eb" stroke-width="2"/>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" font-family="Arial" font-weight="bold" fill="#000">
+                  ${property.currency} ${property.price.toLocaleString()}
+                </text>
+              </svg>
+            `)}`,
               scaledSize: new window.google.maps.Size(100, 30),
               labelOrigin: new window.google.maps.Point(50, 15),
             },
+            /* label: {
+            text: `${property.currency}${property.price.toLocaleString()}`,
+            fontWeight: "bold",
+            color: "#000",
+            fontSize: "14px",
+          }, */
           });
 
           // Guardar referencia al marcador
@@ -83,17 +101,21 @@ export default function PropertyMap({
             // Mostrar ventana de información
             if (infoWindowRef.current) {
               infoWindowRef.current.setContent(`
-                  <div style="max-width: 200px;">
-                    <h3 style="font-weight: bold; margin-bottom: 5px;">${property.title}</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 5px;">${property.location}</p>
-                    <div style="display: flex; align-items: center; margin-bottom: 5px; justify-content: space-between;">
-                      <p style="font-weight: bold; color: #2563eb;">$${property.price.toLocaleString()}</p>
-                      <a href="/propiedades/${
-                        property.id
-                      }" target="_blank" style="margin-left: 5px; text-decoration: none; color: #2563eb;">Ver más</a>
-                    </div>
-                  </div>
-                `);
+              <div style="max-width: 200px;">
+                <h3 style="font-weight: bold; margin-bottom: 5px;">${
+                  property.title
+                }</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 5px;">${
+                  property.location
+                }</p>
+                <div style="display: flex; align-items: center; margin-bottom: 5px; justify-content: space-between;">
+                <p style="font-weight: bold; color: #2563eb;">$${property.price.toLocaleString()}</p>
+                <a href="/propiedades/${
+                  property.id
+                }" target="_blank" style="margin-left: 5px; text-decoration: none; color: #2563eb;">Ver más</a>
+                </div>
+              </div>
+            `);
               infoWindowRef.current.open(mapRef.current, marker);
             }
           });
@@ -120,21 +142,17 @@ export default function PropertyMap({
 
     if (typeof window.google !== "undefined" && window.google.maps) {
       initializeMap();
-      googleMapsScriptLoaded.current = true;
       return;
     }
 
-    if (googleMapsScriptLoaded.current) {
-      return; // No volver a cargar si ya se cargó
-    }
+/*     window.initMap = initializeMap; */
 
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}`; // Referenciamos el nuevo nombre
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&callback=initMap`;
     script.async = true;
     script.defer = true;
 
     script.onload = () => {
-      googleMapsScriptLoaded.current = true;
       if (window.google && window.google.maps) {
         initializeMap();
       } else {
@@ -150,14 +168,10 @@ export default function PropertyMap({
     document.head.appendChild(script);
 
     return () => {
-      window.initMap = () => {}; // Limpiar la función global
-      const scripts = document.head.getElementsByTagName("script");
-      Array.from(scripts).forEach((s) => {
-        if (s.src.includes("maps.googleapis.com")) {
-          document.head.removeChild(s);
-        }
-      });
-      googleMapsScriptLoaded.current = false;
+      window.initMap = () => {};
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
     };
   }, [initializeMap]);
 
@@ -166,7 +180,9 @@ export default function PropertyMap({
     if (!mapRef.current || !selectedPropertyId) return;
 
     // Centrar el mapa en la propiedad seleccionada
-    const selectedProperty = properties.find((p) => p.id === selectedPropertyId);
+    const selectedProperty = properties.find(
+      (p) => p.id === selectedPropertyId
+    );
     if (selectedProperty && selectedProperty.lat && selectedProperty.lon) {
       mapRef.current.panTo({
         lat: selectedProperty.lat,
@@ -178,17 +194,21 @@ export default function PropertyMap({
       const marker = markersRef.current[selectedPropertyId];
       if (marker && infoWindowRef.current) {
         infoWindowRef.current.setContent(`
-            <div style="max-width: 200px;">
-              <h3 style="font-weight: bold; margin-bottom: 5px;">${selectedProperty.title}</h3>
-              <p style="font-size: 0.9rem; margin-bottom: 5px;">${selectedProperty.location}</p>
-              <div style="display: flex; align-items: center; margin-bottom: 5px; justify-content: space-between;">
-                <p style="font-weight: bold; color: #2563eb;">$${selectedProperty.price.toLocaleString()}</p>
-                <a href="/propiedades/${
-                  selectedProperty.id
-                }" target="_blank" style="margin-left: 5px; text-decoration: none; color: #2563eb;">Ver más</a>
-              </div>
+          <div style="max-width: 200px;">
+            <h3 style="font-weight: bold; margin-bottom: 5px;">${
+              selectedProperty.title
+            }</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 5px;">${
+              selectedProperty.location
+            }</p>
+            <div style="display: flex; align-items: center; margin-bottom: 5px; justify-content: space-between;">
+              <p style="font-weight: bold; color: #2563eb;">$${selectedProperty.price.toLocaleString()}</p>
+              <a href="/propiedades/${
+                selectedProperty.id
+              }" target="_blank" style="margin-left: 5px; text-decoration: none; color: #2563eb;">Ver más</a>
             </div>
-          `);
+          </div>
+        `);
         infoWindowRef.current.open(mapRef.current, marker);
       }
     }

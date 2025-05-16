@@ -23,12 +23,12 @@ export default function RootLayout({
     <html lang="es" className="light">
       <head>
         <link rel="icon" href="/smallLogo3.png" type="image/png" />
-        <Script
+       {/*  <Script
           src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo&libraries=places`}
           strategy="beforeInteractive"
-        />
+        /> */}
         <script async
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo&loading=async&libraries=places&callback=initMap">
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo&loading=async&libraries=places">
         </script>
       </head>
       <body className={inter.className}>
