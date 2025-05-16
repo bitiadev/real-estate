@@ -132,6 +132,7 @@ export async function getPropertyImages(propertyId: number) {
       .select("*")
       .eq("property_id", propertyId)
       .order("main_image", { ascending: false })
+      .order("id", { ascending: true })
 
     if (error) {
       throw error
