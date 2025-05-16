@@ -33,18 +33,20 @@ export default async function HomePage() {
   // Estas imágenes se mostrarán según el tipo de dispositivo (desktop, tablet, mobile)
   const heroImages = {
     desktop: [
-      '/images/hero/slide-1.jpg',
-      '/images/hero/slide-2.jpg',
+      /* '/images/hero/slide-1.jpg',
+      '/images/hero/slide-2.jpg', */
       '/images/hero/slide-3.jpg',
       '/images/hero/slide-4.jpg',      
     ],
     tablet: [
-      '/images/hero/slide-1.jpg',
-      '/images/hero/slide-2.jpg',
+      /* '/images/hero/slide-1.jpg',
+      '/images/hero/slide-2.jpg', */
+      '/images/hero/slide-3.jpg',
+      '/images/hero/slide-4.jpg', 
     ],
     mobile: [
-      '/images/hero/slide-1.jpg',
-      '/images/hero/slide-2.jpg',
+      /* '/images/hero/slide-1.jpg',
+      '/images/hero/slide-2.jpg', */
       '/images/hero/slide-3.jpg',
       '/images/hero/slide-4.jpg',
     ],

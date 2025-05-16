@@ -12,13 +12,13 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <header className="px-4 md:px-8 sticky top-0 z-50 w-full border-b bg-white flex justify-center text-naranja">
+    <header className="px-4 md:px-8 sticky top-0 z-50 w-full border-b bg-azul flex justify-center text-naranja">
       <div className="w-full flex h-16 md:h-24  items-center justify-between">
         <div className="flex items-center gap-2 md:ml-[20%]">
           <Link href="/" className="flex items-center gap-2">
             {/* <Building className="h-6 w-6" /> */}
             <Image
-              src="/logo.svg"
+              src="/logo2.svg"
               alt="Logo"
               width={90}
               height={70}
