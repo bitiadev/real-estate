@@ -30,6 +30,7 @@ export default function RootLayout({
         <script async
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo&loading=async&libraries=places">
         </script>
+        <meta name="google-site-verification" content="LuJasdcxHIafPuqyo8G19zM6IeVD_YBXrOQU-q4CvFQ" />
       </head>
       <body className={inter.className}>
         {/* <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange> */}
