@@ -1,0 +1,10 @@
+# Block all crawlers for /dashboard
+User-agent: *
+Disallow: /dashboard
+ 
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+Sitemap: https://www.yitanipropiedades.com.ar/sitemap.xml
+Host: https://www.yitanipropiedades.com.ar

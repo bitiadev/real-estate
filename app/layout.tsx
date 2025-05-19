@@ -38,9 +38,12 @@ export default function RootLayout({
         </script>        
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Encuentra las mejores propiedades en venta y alquiler en Tres Arroyos, Buenos Aires y zona" />
-        <meta name="keywords" content="inmobiliaria, propiedades, venta, alquiler, Tres Arroyos, Buenos Aires" />
-        <meta name="robots" content="content= index, follow" />
+        <meta name="keywords" content="inmobiliaria, propiedades, venta, alquiler, Tres Arroyos, Buenos Aires, casa" />
         <meta name="google-site-verification" content="YJJsRFa8lUxdpa5_uQt1jcZsU8y6wAoEqxZ-ZBVo71w" />
+        <meta name="robots" content="index,follow" />
+        <meta name="googlebot" content="index,follow" />
+        <meta name="author" content="Glider" />
+        <meta name="copyright" content="© 2025 Glider" />
       </head>
       <body className={inter.className}>
         {/* <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange> */}
