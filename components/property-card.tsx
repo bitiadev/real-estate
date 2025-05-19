@@ -94,7 +94,7 @@ export default function PropertyCard({ property, showFavoriteButton = true }: Pr
         <CardContent className="p-4 flex-grow">
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-bold line-clamp-1">{property.title}</h3>
-            <p className="text-lg font-bold text-primary">{formatPrice(property.price, property.type, property.currency)}</p>
+            {property.price > 0 && <p className="text-lg font-bold text-primary">{formatPrice(property.price, property.type, property.currency)}</p>}
           </div>
           <div className="flex items-center mt-1 text-gray-500 text-sm">
             <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />

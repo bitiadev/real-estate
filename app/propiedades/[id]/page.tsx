@@ -414,7 +414,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
               <span className="text-gray-600">{property.location}</span>
             </div>
             <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
-            <p className="text-2xl font-bold text-gray-900 mb-6">{formatPrice(property.price, property.type, property.currency)}</p>
+            {property.price && <p className="text-2xl font-bold text-gray-900 mb-6">{formatPrice(property.price, property.type, property.currency)}</p>}
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
@@ -675,7 +675,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                           <div>
                             <h4 className="font-medium text-sm line-clamp-1">{prop.title}</h4>
                             <p className="text-gray-500 text-xs">{prop.location}</p>
-                            <p className="text-sm font-semibold mt-1">{formatPrice(prop.price, prop.type, prop.currency)}</p>
+                            {prop.price > 0 && <p className="text-sm font-semibold mt-1">{formatPrice(prop.price, prop.type, prop.currency)}</p>}
                           </div>
                         </div>
                       </Link>
