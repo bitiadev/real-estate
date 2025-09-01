@@ -29,12 +29,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-title" content="Yitani Propiedades" />
         <link rel="manifest" href="/site.webmanifest" />
-       {/*  <Script
-          src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo&libraries=places`}
-          strategy="beforeInteractive"
-        /> */}
+        {/* AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo */}
         <script async
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo&loading=async&libraries=places">
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_kWx0QHadnCB7Ttr_8JVZpqsl1qovfEA&loading=async&libraries=places">
         </script>        
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Encuentra las mejores propiedades en venta y alquiler en Tres Arroyos, Buenos Aires y zona" />
