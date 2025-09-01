@@ -30,6 +30,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Yitani Propiedades" />
         <link rel="manifest" href="/site.webmanifest" />
         {/* AIzaSyCicHfcmOSeaWlTIEIbV3gR2XkCeYn76bo */}
+        
         <script async
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_kWx0QHadnCB7Ttr_8JVZpqsl1qovfEA&loading=async&libraries=places">
         </script>        
