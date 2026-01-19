@@ -99,8 +99,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-6 text-sm text-center">
-          <p>&copy; {new Date().getFullYear()} Inmobiliaria. Todos los derechos reservados.</p>
+        <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
+          <p>&copy; 2025 <Link href="https://www.bitia.com.ar" className="text-white text-bold" target="_blank">Bitia</Link>. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
