@@ -4,8 +4,6 @@ import "./globals.css"
 /* import { ThemeProvider } from "@/components/theme-provider" */
 import { AuthProvider } from "@/contexts/auth-context"
 import AuthGuard from "@/components/auth-guard"
-import Script from "next/script"
-
 
 const inter = Inter({ subsets: ["latin"], preload: false })
 
