@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Building, Home, LogOut, Menu, Settings, User, X, UserPlus, Chrome, Globe, MapPinHouse } from "lucide-react"
+import { Building, Home, LogOut, Menu, User, X, UserPlus, Globe, MapPinHouse } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useToast } from "@/hooks/use-toast"
 
