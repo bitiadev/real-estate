@@ -28,7 +28,6 @@ export default async function HomePage() {
      // Filtrar propiedades destacadas (simulando el atributo `featured`)
   const featuredProperties = activeProperties.filter((p) => p.featured ?? false)
 
-
    // Configuración de imágenes para el carrusel del Hero
   // Estas imágenes se mostrarán según el tipo de dispositivo (desktop, tablet, mobile)
   const heroImages = {
