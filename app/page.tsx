@@ -25,7 +25,7 @@ export default async function HomePage() {
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 3) */
 
-     // Filtrar propiedades destacadas (simulando el atributo `featured`)
+  // Filtrar propiedades destacadas (simulando el atributo `featured`)
   const featuredProperties = activeProperties.filter((p) => p.featured ?? false)
 
    // Configuración de imágenes para el carrusel del Hero
