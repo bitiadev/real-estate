@@ -61,7 +61,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
 
   // Renderiza el carrusel de imágenes
   return (
-    <div className="sticky top-24 w-full h-2/4 bg-[var(--color-background)]">
+    <div className="relative w-full h-2/4 bg-[var(--color-background)]">
       {/* Imágenes del carrusel como fondo */}
       <div className="absolute inset-0">
         {images[deviceType].map((image, index) => (

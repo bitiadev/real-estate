@@ -310,6 +310,43 @@ useEffect(() => {
     }
   }, [filters])
 
+  // Guardar posición de scroll para cuando el usuario regrese de ver una propiedad
+  useEffect(() => {
+    // Desactivar la restauración automática del navegador en esta página
+    // para que no interfiera con nuestra lógica manual al cargar datos asíncronos
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+
+    const handleScroll = () => {
+      // Guardar el desplazamiento actual en sessionStorage
+      sessionStorage.setItem("properties-scroll-y", window.scrollY.toString())
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+  // Restaurar posición de scroll una vez que las propiedades han cargado
+  useEffect(() => {
+    if (!isLoading && filteredProperties.length > 0) {
+      const savedScrollY = sessionStorage.getItem("properties-scroll-y")
+      if (savedScrollY) {
+        // Pequeño timeout para asegurar que el DOM se haya actualizado con las propiedades
+        // Usamos un tiempo ligeramente mayor para asegurar la estabilidad en navegaciones de historial
+        const timer = setTimeout(() => {
+          window.scrollTo({
+            top: Number.parseInt(savedScrollY),
+            behavior: "instant" as ScrollBehavior,
+          })
+        }, 150)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [isLoading, filteredProperties])
+
   return (
     <div className="px-4 md:px-8 py-8 md:py-12">
       <h1 className="text-3xl font-bold mb-4">Buscar Propiedades</h1>

@@ -83,3 +83,6 @@ npm run dev
 ---
 > [!IMPORTANT]
 > Asegúrate de configurar correctamente las políticas de RLS en Supabase para que las imágenes y las propiedades sean visibles públicamente según el estado 'activa'.
+
+## 📜 Historial de Cambios
+Para ver los últimos cambios y mejoras realizadas en el proyecto, consulta el archivo [CHANGELOG.md].

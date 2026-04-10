@@ -61,7 +61,7 @@ export default async function HomePage() {
         images={heroImages}
       />  
       {/* Hero Section */}      {/* Featured Properties */}
-      <section className="w-full py-12 md:py-24 bg-white z-10">
+      <section className="w-full md:w-[80%] mx-auto py-12 md:py-24 bg-white z-10">
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
@@ -95,7 +95,7 @@ export default async function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="w-full py-12 md:py-24 bg-gray-50 z-10">
+      <section className="w-full md:w-[80%] mx-auto py-12 md:py-24 bg-gray-50 z-10">
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
